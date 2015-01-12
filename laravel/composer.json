@@ -5,7 +5,8 @@
 	"license": "MIT",
 	"require": {
 		"laravel/framework": "4.2.*",
-		"brainboxlabs/brain-socket": "v1.0.0"
+		"brainboxlabs/brain-socket": "v1.0.0",
+		"thujohn/pdf": "dev-master"
 	},
 	"autoload": {
 		"classmap": [
