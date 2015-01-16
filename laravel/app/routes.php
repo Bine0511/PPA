@@ -59,3 +59,4 @@ Route::get("/pdf", [
 	"as" => "pdf",
 	"uses" => "FileController@showPDF"
 ]);
+
