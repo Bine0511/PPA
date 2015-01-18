@@ -17,11 +17,6 @@ Route::any("/", [
 	"uses" => "HomeController@showWelcome"
 ])->before('auth');
 
-Route::any("/", [
-	"as" => "index",
-	"uses" => "HomeController@showWelcome"
-])->before('auth');
-
 Route::any("/load", [
 	"as" => "load",
 	"uses" => "HomeController@showLoad"
