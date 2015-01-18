@@ -6,10 +6,15 @@ class FileController extends Controller
 	
 	public function showPDF()
 {
-    $html = '<html><body>'
-            . '<p>Put your html here, or generate it with your favourite '
-            . 'templating system.</p>'
-            . '</body></html>';
+$moderator = DB::table('moderator')->get();
+
+
+    $html = '<html><body><table>';
+  	foreach ($moderator as $moderator)
+	{
+    	$html = $html . '<tr><td>' . $moderator->moderator_name . '</td><td>'.$moderator->moderator_pw.'</td></tr>';
+	}      
+    $html = $html . '</table></body></html>';
     return PDF::load($html, 'A4', 'portrait')->show();
 }
 }
