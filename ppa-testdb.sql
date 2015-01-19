@@ -143,13 +143,13 @@ ALTER TABLE `session`
 -- Indizes für die Tabelle `user`
 --
 ALTER TABLE `user`
- ADD PRIMARY KEY (`user_ID`), ADD UNIQUE KEY `user_session_ID` (`user_session_ID`);
+ ADD PRIMARY KEY (`user_ID`, `user_session_ID`), ADD UNIQUE KEY `user_ID` (`user_ID`);
 
 --
 -- Indizes für die Tabelle `userstory`
 --
 ALTER TABLE `userstory`
- ADD PRIMARY KEY (`userstory_ID`,`userstory_session_ID`), ADD UNIQUE KEY `userstory_session_ID` (`userstory_session_ID`);
+ ADD PRIMARY KEY (`userstory_ID`,`userstory_session_ID`), ADD UNIQUE KEY `userstory_ID` (`userstory_ID`);
 
 --
 -- Indizes für die Tabelle `vote`
