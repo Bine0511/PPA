@@ -177,7 +177,7 @@ ALTER TABLE `session`
 -- Indexes for table `timevote`
 --
 ALTER TABLE `timevote`
- ADD PRIMARY KEY (`timevote_user_id`);
+ ADD PRIMARY KEY (`timevote_user_id`,`timevote_userstory_id`,`timevote_session_id`), ADD KEY `timevote_userstory_id` (`timevote_userstory_id`), ADD KEY `timevote_session_id` (`timevote_session_id`);
 
 --
 -- Indexes for table `user`

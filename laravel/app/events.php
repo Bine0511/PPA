@@ -19,11 +19,11 @@ Event::listen('vote.event',function($client_data){
     return BrainSocket::message('vote.event',array('message'=>'A User voted!'));
 });
 
-Event::listen('vote.event',function($client_data){
+Event::listen('join.event',function($client_data){
     return BrainSocket::message('join.event',array('message'=>'A User joined the room!'));
 });
 
-Event::listen('vote.event',function($client_data){
+Event::listen('story.event',function($client_data){
     return BrainSocket::message('story.event',array('message'=>'The next story is coming!'));
 });
 

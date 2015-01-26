@@ -1,7 +1,6 @@
 @extends("layout")
 @section("content")
-	<input type="text">
-	<input type="button" class="button" value="Abstimmen">
+	<input type="button" class="button" value="100">
 	<div id="log"></div>
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -27,6 +26,15 @@
 			app.BrainSocket.Event.listen('join.event',function(msg){
 				$('#log').append('<div>' + msg.client.data.user_id+' ist beigetreten. </div>');
 			});
+
+			$(document).ready(function(event){
+				app.BrainSocket.message('join.event',
+				{
+					'user_id':fake_user_id
+				}
+				);
+			}
+			);
 
 			$('.button').click(function(event) {
 				app.BrainSocket.message('vote.event',
