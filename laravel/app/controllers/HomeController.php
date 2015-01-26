@@ -2,6 +2,16 @@
 
 class HomeController extends BaseController {
 
+
+	// Tests
+
+	public function showModTest(){
+		return View::make('session/moderator');
+	}
+	public function showUserTest(){
+		return View::make('session/user');
+	}
+
 	/*
 	|--------------------------------------------------------------------------
 	| Default Home Controller

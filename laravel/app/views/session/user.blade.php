@@ -1,5 +1,7 @@
 @extends("layout")
 @section("content")
+	<input type="text">
+	<input type="button" value="Abstimmen">
 	<div id="log"></div>
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -20,13 +22,21 @@
 			);
 
 			app.BrainSocket.Event.listen('vote.event',function(msg){
-				$('#chat-log').append('<div class="alert alert-info">' + msg.client.data.user_id+' hat abgestimmt: '+msg.client.data.message+'</div>');
+				$('#log').append('<div>' + msg.client.data.user_id+' hat abgestimmt: '+msg.client.data.message+'</div>');
 			});
-
 
 			app.BrainSocket.Event.listen('join.event',function(msg){
-				$('#chat-log').append('<div class="alert alert-info">' + msg.client.data.user_id+' ist beigetreten: '+msg.client.data.message+'</div>');
+				$('#log').append('<div>' + msg.client.data.user_id+' ist beigetreten. </div>');
 			});
+
+			$('.button').click(function(event) {
+				app.BrainSocket.message('vote.event',
+				{
+					'message':$(this).attr('value'),
+					'user_id':fake_user_id
+				}
+				);
+			}
 			);
 		});
 	</script>

@@ -1,5 +1,14 @@
 <?php
 
+//Test Routen
+
+Route::get("/modtest", [
+	"uses" => "HomeController@showModTest"
+]);
+Route::get("/usertest", [
+	"uses" => "HomeController@showUserTest"
+]);
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes

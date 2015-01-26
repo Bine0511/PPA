@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 26. Jan 2015 um 13:43
+-- Erstellungszeit: 26. Jan 2015 um 14:22
 -- Server Version: 5.6.21
 -- PHP-Version: 5.6.3
 
@@ -213,10 +213,10 @@ MODIFY `userstory_ID` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 
 --
--- Constraints der Tabelle `moderator`
+-- Constraints der Tabelle `session`
 --
-ALTER TABLE `moderator`
-ADD CONSTRAINT `moderator_ibfk_1` FOREIGN KEY (`moderator_ID`) REFERENCES `session` (`session_moderator_ID`);
+ALTER TABLE `session`
+ADD CONSTRAINT `session_ibfk_1` FOREIGN KEY (`session_moderator_ID`) REFERENCES `moderator` (`moderator_ID`);
 
 --
 -- Constraints der Tabelle `user`
