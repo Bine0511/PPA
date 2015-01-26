@@ -3,9 +3,15 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
+<<<<<<< HEAD:db/ppa.sql
 -- Generation Time: Jan 26, 2015 at 03:54 PM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
+=======
+-- Erstellungszeit: 26. Jan 2015 um 14:22
+-- Server Version: 5.6.21
+-- PHP-Version: 5.6.3
+>>>>>>> origin/master:db/ppa-testdb.sql
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -220,10 +226,14 @@ MODIFY `userstory_ID` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 
 --
+<<<<<<< HEAD:db/ppa.sql
 -- Constraints for table `moderator`
+=======
+-- Constraints der Tabelle `session`
+>>>>>>> origin/master:db/ppa-testdb.sql
 --
-ALTER TABLE `moderator`
-ADD CONSTRAINT `moderator_ibfk_1` FOREIGN KEY (`moderator_ID`) REFERENCES `session` (`session_moderator_ID`);
+ALTER TABLE `session`
+ADD CONSTRAINT `session_ibfk_1` FOREIGN KEY (`session_moderator_ID`) REFERENCES `moderator` (`moderator_ID`);
 
 --
 -- Constraints for table `user`

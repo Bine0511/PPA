@@ -1,5 +1,14 @@
 <?php
 
+//Test Routen
+
+Route::get("/modtest", [
+	"uses" => "HomeController@showModTest"
+]);
+Route::get("/usertest", [
+	"uses" => "HomeController@showUserTest"
+]);
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -11,11 +20,10 @@
 |
 */
 
-
 Route::any("/", [
 	"as" => "index",
 	"uses" => "HomeController@showWelcome"
-])->before('auth');
+]);
 
 Route::any("/load", [
 	"as" => "load",
@@ -23,26 +31,26 @@ Route::any("/load", [
 ])->before('auth');
 
 Route::get("/login", [
-	"as" => "user/login",
-	"uses" => "UserController@getLogin"
+	"as" => "mod/login",
+	"uses" => "ModController@getLogin"
 ])->before('guest');
 
 Route::post("/login", [
-	"uses" => "UserController@postLogin"
+	"uses" => "ModController@postLogin"
 ]);
 
 Route::get("/register", [
-	"as" => "user/register",
-	"uses" => "UserController@getRegister"
+	"as" => "mod/register",
+	"uses" => "ModController@getRegister"
 ]);
 
 Route::post("/register", [
-	"uses" => "UserController@postRegister"
+	"uses" => "ModController@postRegister"
 ]);
 
 Route::any("/logout", [
-	"as" => "user/logout",
-	"uses" => "UserController@logout"
+	"as" => "mod/logout",
+	"uses" => "ModController@logout"
 ])->before('auth');
 
 Route::get("/pages/{page}", [
@@ -54,4 +62,3 @@ Route::get("/pdf", [
 	"as" => "pdf",
 	"uses" => "FileController@showPDF"
 ]);
-
