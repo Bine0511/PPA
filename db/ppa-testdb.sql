@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Erstellungszeit: 26. Jan 2015 um 12:57
+-- Erstellungszeit: 26. Jan 2015 um 13:43
 -- Server Version: 5.6.21
 -- PHP-Version: 5.6.3
 
@@ -50,16 +50,17 @@ CREATE TABLE IF NOT EXISTS `session` (
 `session_ID` int(15) NOT NULL,
   `session_name` varchar(50) NOT NULL,
   `session_pw` varchar(50) NOT NULL,
-  `session_moderator_ID` int(15) NOT NULL
+  `session_moderator_ID` int(15) NOT NULL,
+  `session_basestory_id` int(15) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Daten für Tabelle `session`
 --
 
-INSERT INTO `session` (`session_ID`, `session_name`, `session_pw`, `session_moderator_ID`) VALUES
-(1, '1234', '1234', 1),
-(2, 'test', 'test', 2);
+INSERT INTO `session` (`session_ID`, `session_name`, `session_pw`, `session_moderator_ID`, `session_basestory_id`) VALUES
+(1, '1234', '1234', 1, 0),
+(2, 'test', 'test', 2, 0);
 
 -- --------------------------------------------------------
 
@@ -83,17 +84,16 @@ CREATE TABLE IF NOT EXISTS `timevote` (
 CREATE TABLE IF NOT EXISTS `user` (
 `user_ID` int(15) NOT NULL,
   `user_name` varchar(50) NOT NULL,
-  `user_session_ID` int(15) NOT NULL,
-  `user_basestory_id` int(15) NOT NULL
+  `user_session_ID` int(15) NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Daten für Tabelle `user`
 --
 
-INSERT INTO `user` (`user_ID`, `user_name`, `user_session_ID`, `user_basestory_id`) VALUES
-(1, 'Franz', 1, 0),
-(2, 'Herbert', 2, 0);
+INSERT INTO `user` (`user_ID`, `user_name`, `user_session_ID`) VALUES
+(1, 'Franz', 1),
+(2, 'Herbert', 2);
 
 -- --------------------------------------------------------
 
@@ -105,17 +105,18 @@ CREATE TABLE IF NOT EXISTS `userstory` (
 `userstory_ID` int(15) NOT NULL,
   `userstory_session_ID` int(15) NOT NULL,
   `userstory_name` varchar(50) NOT NULL,
-  `userstory_description` varchar(300) NOT NULL,
-  `userstory_average` int(10) NOT NULL
+  `userstory_description` varchar(300) DEFAULT NULL,
+  `userstory_average` int(10) DEFAULT NULL,
+  `userstory_time_average` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Daten für Tabelle `userstory`
 --
 
-INSERT INTO `userstory` (`userstory_ID`, `userstory_session_ID`, `userstory_name`, `userstory_description`, `userstory_average`) VALUES
-(1, 1, 'Planung', 'Planungsdokumente erstellen', 0),
-(2, 2, 'Programmierung', 'Programmieren bis zum umfallen', 0);
+INSERT INTO `userstory` (`userstory_ID`, `userstory_session_ID`, `userstory_name`, `userstory_description`, `userstory_average`, `userstory_time_average`) VALUES
+(1, 1, 'Planung', 'Planungsdokumente erstellen', 0, ''),
+(2, 2, 'Programmierung', 'Programmieren bis zum umfallen', 0, '');
 
 -- --------------------------------------------------------
 
