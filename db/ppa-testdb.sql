@@ -106,7 +106,7 @@ CREATE TABLE IF NOT EXISTS `userstory` (
   `userstory_session_ID` int(15) NOT NULL,
   `userstory_name` varchar(50) NOT NULL,
   `userstory_description` varchar(300) DEFAULT NULL,
-  `userstory_average` int(10) DEFAULT NULL,
+  `userstory_average` varchar(20) DEFAULT NULL,
   `userstory_time_average` varchar(20) DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 

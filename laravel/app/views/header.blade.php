@@ -2,14 +2,14 @@
 	<div class="header">
 			<div class="menu">
 			@if (Auth::check())
-				<a href="{{ URL::route('user/logout') }}">
+				<a href="{{ URL::route('mod/logout') }}">
 					logout
 				</a>
 			@else
-				<a href="{{ URL::route('user/login') }}">
+				<a href="{{ URL::route('mod/login') }}">
 					Login
 				</a>
-				<a href="{{ URL::route('user/register') }}">
+				<a href="{{ URL::route('mod/register') }}">
 					Register
 				</a>
 			@endif
