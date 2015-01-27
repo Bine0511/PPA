@@ -7,17 +7,20 @@ class ModController extends Controller
 	}
 
 	public function postLogin(){
-		$user = array(
+
+		$mod = array(
             'moderator_name' => Input::get('name'),
-            'moderator_pw' => Input::get('pwd')
+            'password' => Input::get('pwd')
         );
         
-        if (Auth::attempt($user)) {
+        if (Auth::attempt($mod)) {
             return Redirect::route('index');
         }
-        
+
         return Redirect::route('mod/login')
-            ->withInput();
+            ->withInput()
+            ->with('login_errors', true);
+      
 	}
 
 
@@ -26,25 +29,19 @@ class ModController extends Controller
 	}
 
 	public function postRegister(){
-		$rules = array(
-			'name' => array('required', 'min:3'),
-			'pwd' => array('required', 'min:5')
-		);
-		
-		$messages = array(
-			'pwd.required' => 'Password is required.',
-			'pwd.min' => 'Your Password is too short! Min. 5 symbols.',
-			'name.required' => 'Username is required.',
-			'name.min' => 'Your Username is too short! Min. 3 letters.',
-			'name.unique' => 'This Username has already been taken.'
-		);
 
-		$validation = Validator::make(Input::all(), $rules, $messages);
-		if ($validation->fails()) {
-			return Redirect::to('register')->withInput()->withErrors($validation);	
-		}
+		$mod = array(
+            'moderator_name' => Input::get('name'),
+            'moderator_pw' => Hash::make(Input::get('pwd'))
+        );
 
-		$test = DB::insert('insert into moderator (moderator_name, moderator_pw) values("'.Input::get('name').'", "'.Hash::make(Input::get('pwd')).'")');
+        $newMod = Mod::create($mod);
+        if($newMod){
+            Auth::login($newMod);
+            return Redirect::route('mod/login');
+        }
+
+        return Redirect::to('register')->withInput()->withErrors($validation);
 	}
 
 	public function logout() {

@@ -27,8 +27,9 @@ return array(
 	| is often just the "User" model but you may use whatever you like.
 	|
 	*/
-
-	'model' => 'User',
+	'username' => 'moderator_name',
+    'password' => 'moderator_pw',
+	'model' => 'Mod',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -41,7 +42,7 @@ return array(
 	|
 	*/
 
-	'table' => 'users',
+	'table' => 'moderator',
 
 	/*
 	|--------------------------------------------------------------------------

@@ -4,6 +4,7 @@ use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
 class Mod extends Eloquent implements UserInterface, RemindableInterface {
+	protected $fillable = ['moderator_id','moderator_name','moderator_pw'];
 	
 	public $timestamps = false;
 	/**
@@ -11,15 +12,20 @@ class Mod extends Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @var string
 	 */
+
+	protected $hidden = ['moderator_pw'];
 	protected $table = 'moderator';
+    protected $primaryKey = "moderator_id";
+    public static $rules = array(
+        'moderator_name' => 'required',
+        'moderator_pw' => 'required'
+    ); 
 
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
 	 * @var array
 	 */
-	protected $hidden = ['moderator_pw'];
-
 	/**
 	 * Get the unique identifier for the user.
 	 *

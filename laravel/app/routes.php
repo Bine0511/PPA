@@ -25,11 +25,6 @@ Route::any("/", [
 	"uses" => "HomeController@showWelcome"
 ]);
 
-Route::any("/load", [
-	"as" => "load",
-	"uses" => "HomeController@showLoad"
-])->before('auth');
-
 Route::get("/login", [
 	"as" => "mod/login",
 	"uses" => "ModController@getLogin"
@@ -42,7 +37,7 @@ Route::post("/login", [
 Route::get("/register", [
 	"as" => "mod/register",
 	"uses" => "ModController@getRegister"
-]);
+])->before('guest');
 
 Route::post("/register", [
 	"uses" => "ModController@postRegister"
@@ -52,6 +47,22 @@ Route::any("/logout", [
 	"as" => "mod/logout",
 	"uses" => "ModController@logout"
 ])->before('auth');
+
+
+Route::get("/session", [
+	"as" => "session/create",
+	"uses" => "SessionController@getCreateSession"
+])->before('auth');
+
+Route::post("/session", [
+	"as" => "session/start",
+	"uses" => "SessionController@postCreateSession"
+])->before('auth');
+
+
+
+
+
 
 Route::get("/pages/{page}", [
 	"as" => "page",

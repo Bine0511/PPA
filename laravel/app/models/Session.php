@@ -3,7 +3,10 @@
 use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
-class User extends Eloquent implements UserInterface, RemindableInterface {
+class Mod extends Eloquent implements UserInterface{
+	//, RemindableInterface 
+
+	protected $fillable = [ 'session_id', 'session_name', 'session_pw', 'session_moderator_id', 'session_basestory_id' ];
 	
 	public $timestamps = false;
 	/**
@@ -11,15 +14,20 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @var string
 	 */
-	protected $table = 'user';
+
+	protected $hidden = ['session_pw'];
+	protected $table = 'session';
+    protected $primaryKey = "moderator_id";
+    public static $rules = array(
+        'session_name' => 'required',
+        'session_pw' => 'required'
+    ); 
 
 	/**
 	 * The attributes excluded from the model's JSON form.
 	 *
 	 * @var array
 	 */
-	protected $hidden = ['password'];
-
 	/**
 	 * Get the unique identifier for the user.
 	 *
@@ -35,7 +43,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 * @return string
 	 */
 	public function getAuthPassword(){
-		return $this->password;
+		return $this->moderator_pw;
 	}
 
 	public function getRememberToken(){
@@ -55,8 +63,8 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @return string
 	 */
-	public function getReminderEmail(){
+/*	public function getReminderEmail(){
 		return $this->email;
-	}
+	}*/
 
 }

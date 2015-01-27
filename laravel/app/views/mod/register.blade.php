@@ -6,10 +6,10 @@
  	{{ Form::text('name') }}</p>
  	
  	<p>{{ Form::label('pwd', 'Password') }}
- 	{{ Form::text('pwd') }}</p>
+ 	{{ Form::password('pwd') }}</p>
  
  	<p>{{ Form::label('pwd_confirmation', 'Password confirm') }}
- 	{{ Form::text('pwd_confirmation') }}</p>
+ 	{{ Form::password('pwd_confirmation') }}</p>
  
  	<p>{{ Form::submit('Submit') }}</p>
  

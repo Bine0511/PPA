@@ -3,7 +3,6 @@
 <div>
 	<h1>Willkommen zu Planning Poker App!</h1>
 
-	<a href="{{ URL::route('session/create') }}">Session erstellen</a>
 
 	{{ Form::open(array('route' => array('mod/register'), 'method' => 'post')) }}
  

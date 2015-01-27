@@ -22,7 +22,7 @@ class UserController extends Controller
 
 
 	public function getRegister() {
-		return View::make("user./register");
+		return View::make("user.register");
 	}
 
 	public function postRegister(){
@@ -44,7 +44,7 @@ class UserController extends Controller
 			return Redirect::to('register')->withInput()->withErrors($validation);	
 		}
 
-		$test = DB::insert('insert into users (username, password) values("'.Input::get('username').'", "'.Hash::make(Input::get('password')).'")');
+		$test = DB::insert('insert into user (username, password) values("'.Input::get('username').'", "'.Hash::make(Input::get('password')).'")');
 	}
 
 	public function logout() {
