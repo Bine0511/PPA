@@ -1,6 +1,6 @@
 @extends("layout")
 @section("content")
-	<div id="log"></div>
+	<div id="users"></div>
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
@@ -19,11 +19,11 @@
 			);
 
 			app.BrainSocket.Event.listen('vote.event',function(msg){
-				$('#log').append('<div>' + msg.client.data.user_id+' hat abgestimmt: '+msg.client.data.message+'</div>');
+				$('#users').append('<div>' + msg.client.data.user_id+' hat abgestimmt: '+msg.client.data.message+'</div>');
 			});
 
 			app.BrainSocket.Event.listen('join.event',function(msg){
-				$('#log').append('<div>' + msg.client.data.user_id+' ist beigetreten. </div>');
+				$('#users').append('<div id="' + msg.client.data.user_id + '">' + msg.client.data.user_id+': Waiting... </div>');
 			});
 		});
 	</script>

@@ -15,8 +15,12 @@ class BrainSocketEventListener implements MessageComponentInterface {
 	}
 
 	public function onOpen(ConnectionInterface $conn) {
-		echo "Connection Established! \n";
+		echo "Connection Established!\n";
 		$this->clients->attach($conn);
+
+		foreach ($this->clients as $client) {
+			$client->send($this->response->make("{\"client\":{\"event\":\"join.event\",\"data\":{\"user_id\": $conn->resourceId}}}"));
+		}
 	}
 
 	public function onMessage(ConnectionInterface $from, $msg) {
