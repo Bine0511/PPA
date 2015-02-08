@@ -3,15 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
-<<<<<<< HEAD:db/ppa.sql
--- Generation Time: Jan 26, 2015 at 03:54 PM
+-- Generation Time: Feb 08, 2015 at 11:35 AM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
-=======
--- Erstellungszeit: 26. Jan 2015 um 14:22
--- Server Version: 5.6.21
--- PHP-Version: 5.6.3
->>>>>>> origin/master:db/ppa-testdb.sql
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -23,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `ppa`
+-- Database: `ppa-testdb`
 --
 
 -- --------------------------------------------------------
@@ -59,16 +53,18 @@ CREATE TABLE IF NOT EXISTS `session` (
   `session_moderator_ID` int(15) NOT NULL,
   `session_basestory_id` int(15) DEFAULT NULL,
   `avg_sum` varchar(20) NOT NULL,
-  `avg_sum_base` varchar(20) NOT NULL
+  `avg_sum_base` varchar(20) NOT NULL,
+  `avg_time_div_avg` varchar(20) NOT NULL,
+  `sum_calc_time` varchar(10) NOT NULL
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `session`
 --
 
-INSERT INTO `session` (`session_ID`, `session_name`, `session_pw`, `session_moderator_ID`, `session_basestory_id`, `avg_sum`, `avg_sum_base`) VALUES
-(1, '1234', '1234', 1, 1, '17.25', '15.5'),
-(2, 'test', 'test', 2, 0, '', '');
+INSERT INTO `session` (`session_ID`, `session_name`, `session_pw`, `session_moderator_ID`, `session_basestory_id`, `avg_sum`, `avg_sum_base`, `avg_time_div_avg`, `sum_calc_time`) VALUES
+(1, '1234', '1234', 1, 1, '17.25', '15.5', '5.48385', '94.5957'),
+(2, 'test', 'test', 2, 0, '', '', '', '');
 
 -- --------------------------------------------------------
 
@@ -89,7 +85,9 @@ CREATE TABLE IF NOT EXISTS `timevote` (
 
 INSERT INTO `timevote` (`timevote_user_id`, `timevote_userstory_id`, `timevote_session_id`, `timevote_value`) VALUES
 (1, 1, 1, '20'),
-(2, 1, 1, '10');
+(1, 2, 1, '30'),
+(2, 1, 1, '10'),
+(2, 2, 1, '5');
 
 -- --------------------------------------------------------
 
@@ -123,16 +121,18 @@ CREATE TABLE IF NOT EXISTS `userstory` (
   `userstory_name` varchar(50) NOT NULL,
   `userstory_description` varchar(300) DEFAULT NULL,
   `userstory_average` varchar(20) DEFAULT NULL,
-  `userstory_time_average` varchar(20) DEFAULT NULL
+  `userstory_time_average` varchar(20) DEFAULT NULL,
+  `userstory_timeavg_div_avg` varchar(6) NOT NULL,
+  `calc_time` varchar(6) NOT NULL
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `userstory`
 --
 
-INSERT INTO `userstory` (`userstory_ID`, `userstory_session_ID`, `userstory_name`, `userstory_description`, `userstory_average`, `userstory_time_average`) VALUES
-(1, 1, 'Planung', 'Planungsdokumente erstellen', '15.5', ''),
-(2, 1, 'Programmierung', 'Programmieren bis zum umfallen', '1.75', '');
+INSERT INTO `userstory` (`userstory_ID`, `userstory_session_ID`, `userstory_name`, `userstory_description`, `userstory_average`, `userstory_time_average`, `userstory_timeavg_div_avg`, `calc_time`) VALUES
+(1, 1, 'Planung', 'Planungsdokumente erstellen', '15.5', '15', '0.9677', '84.999'),
+(2, 1, 'Programmierung', 'Programmieren bis zum umfallen', '1.75', '17.5', '10', '9.5967');
 
 -- --------------------------------------------------------
 
@@ -221,40 +221,6 @@ MODIFY `user_ID` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 ALTER TABLE `userstory`
 MODIFY `userstory_ID` int(15) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
---
--- Constraints for dumped tables
---
-
---
-<<<<<<< HEAD:db/ppa.sql
--- Constraints for table `moderator`
-=======
--- Constraints der Tabelle `session`
->>>>>>> origin/master:db/ppa-testdb.sql
---
-ALTER TABLE `session`
-ADD CONSTRAINT `session_ibfk_1` FOREIGN KEY (`session_moderator_ID`) REFERENCES `moderator` (`moderator_ID`);
-
---
--- Constraints for table `user`
---
-ALTER TABLE `user`
-ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`user_session_ID`) REFERENCES `session` (`session_ID`);
-
---
--- Constraints for table `userstory`
---
-ALTER TABLE `userstory`
-ADD CONSTRAINT `userstory_ibfk_1` FOREIGN KEY (`userstory_session_ID`) REFERENCES `session` (`session_ID`);
-
---
--- Constraints for table `vote`
---
-ALTER TABLE `vote`
-ADD CONSTRAINT `vote_ibfk_1` FOREIGN KEY (`vote_userstory_ID`) REFERENCES `userstory` (`userstory_ID`),
-ADD CONSTRAINT `vote_ibfk_2` FOREIGN KEY (`vote_user_ID`) REFERENCES `user` (`user_ID`),
-ADD CONSTRAINT `vote_ibfk_3` FOREIGN KEY (`vote_session_id`) REFERENCES `session` (`session_ID`);
-
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
