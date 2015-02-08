@@ -1,6 +1,13 @@
 @extends("layout")
 @section("content")
-	<div id="users"></div>
+	{{ HTML::style('css/session.css'); }}
+	
+	<table id="users">
+  	<tr>
+    	<th>Karte</th>
+    	<th>User</th>
+  	</tr>
+	</table> 
 	<input type="button" class="button" value="Start">
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
@@ -9,7 +16,7 @@
 	<script type="text/javascript" charset="utf-8">
 		$(function(){
 
-			var fake_user_id = Math.floor((Math.random()*1000)+1);
+			var fake_user_id = Math.floor((Math.random()*2000)+1);
 
 			//make sure to update the port number if your ws server is running on a different one.
 			window.app = {};
@@ -20,11 +27,11 @@
 			);
 
 			app.BrainSocket.Event.listen('join.event',function(msg){
-				$('#users').append('<div id="' + msg.client.data.user_id + '">' + msg.client.data.user_name+'</div>');
+				$('#users').append('<tr id="tr_' + msg.client.data.user_id +'"><td><img class="card" src="images/leer.png"></td><td>' + msg.client.data.user_name+'</td></tr>');
 			});
 
 			app.BrainSocket.Event.listen('pick.event',function(msg){
-				$('#users').append('<div>' + msg.client.data.user_id+' hat abgestimmt: '+msg.client.data.message+'</div>');
+				$('#tr_' + msg.client.data.user_id).replaceWith('<tr id="tr_' + msg.client.data.user_id +'"><td><img class="card"src="images/' + msg.client.data.value + '.png"></td><td>' + msg.client.data.user_name+'</td></tr>');
 			});
 		});
 	</script>

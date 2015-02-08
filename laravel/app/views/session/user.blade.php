@@ -1,18 +1,20 @@
 @extends("layout")
 @section("content")
-	<input type="button" class="votebutton" value="0">
-	<input type="button" class="votebutton" value="0.5">
-	<input type="button" class="votebutton" value="1">
-	<input type="button" class="votebutton" value="2">
-	<input type="button" class="votebutton" value="3">
-	<input type="button" class="votebutton" value="5">
-	<input type="button" class="votebutton" value="8">
-	<input type="button" class="votebutton" value="13">
-	<input type="button" class="votebutton" value="20">
-	<input type="button" class="votebutton" value="40">
-	<input type="button" class="votebutton" value="100">
-	<input type="button" class="votebutton" value="?">
-	<input type="button" class="votebutton" value="coffee">
+	{{ HTML::style('css/session.css'); }}
+
+	<input type="button" class="votebutton" value="0" style="background-image: url('images/0.png')">
+	<input type="button" class="votebutton" value="0,5" style="background-image: url('images/0,5.png')">
+	<input type="button" class="votebutton" value="1" style="background-image: url('images/1.png')">
+	<input type="button" class="votebutton" value="2" style="background-image: url('images/2.png')">
+	<input type="button" class="votebutton" value="3" style="background-image: url('images/3.png')">
+	<input type="button" class="votebutton" value="5" style="background-image: url('images/5.png')">
+	<input type="button" class="votebutton" value="8" style="background-image: url('images/8.png')">
+	<input type="button" class="votebutton" value="13" style="background-image: url('images/13.png')">
+	<input type="button" class="votebutton" value="20" style="background-image: url('images/20.png')">
+	<input type="button" class="votebutton" value="40" style="background-image: url('images/40.png')">
+	<input type="button" class="votebutton" value="100" style="background-image: url('images/100.png')">
+	<input type="button" class="votebutton" value="fragezeichen" style="background-image: url('images/fragezeichen.png')">
+	<input type="button" class="votebutton" value="coffee" style="background-image: url('images/coffee.png')">
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
 	<script src="js/brain-socket.min.js"></script>
@@ -22,40 +24,35 @@
 			//make sure to update the port number if your ws server is running on a different one.
 			window.app = {};
 			var first = true;
-			var fake_user_id = 'User' + (Math.floor((Math.random()*1000)+1)).toString();
+			var fake_user_id = Math.floor((Math.random()*1000)+1);
+			var fake_user_name = 'User' + (Math.floor((Math.random()*1000)+1)).toString();
 
 			app.BrainSocket = new BrainSocket(
 				new WebSocket('ws://localhost:8080'),
 				new BrainSocketPubSub()
 			);
 
-			app.BrainSocket.Event.listen('pick.event',function(msg){
-				$('#users').append('<div>' + msg.client.data.user_id+' hat abgestimmt: '+msg.client.data.message+'</div>');
-			});
-
 			window.setTimeout(joinsession, 1000 ); 
+
+			$('.votebutton').click(function(event) {
+				app.BrainSocket.message('pick.event',
+				{
+					'user_id':fake_user_id,
+					'user_name':fake_user_name,
+					'value':$(this).attr('value')
+				}
+				);
+			}
+			);
 
 			function joinsession(event){
 				app.BrainSocket.message('join.event',
 				{
 					'user_id':fake_user_id,
-					'user_name':fake_user_id
+					'user_name':fake_user_name
 				}
 				);
 			}
-
-			$('.button').click(function(event) {
-				app.BrainSocket.message('join.event',
-				{
-					'message':$(this).attr('value'),
-					'user_id':fake_user_id,
-					'user_name':fake_user_id
-				}
-				);
-    			$('.button').attr("disabled", "disabled");
-    			$('.button').attr("value", "Warten...");
-			}
-			);
 		});
 	</script>
 @stop
