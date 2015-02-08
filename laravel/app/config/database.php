@@ -55,7 +55,7 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'ppa-testdb',
+			'database'  => 'ppa-db',
 			'username'  => 'root',
 			'password'  => '',
 			'charset'   => 'utf8',

@@ -1,6 +1,7 @@
 @extends("layout")
 @section("content")
 	<div id="users"></div>
+	<input type="button" class="button" value="Start">
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
@@ -18,12 +19,12 @@
 					new BrainSocketPubSub()
 			);
 
-			app.BrainSocket.Event.listen('vote.event',function(msg){
-				$('#users').append('<div>' + msg.client.data.user_id+' hat abgestimmt: '+msg.client.data.message+'</div>');
+			app.BrainSocket.Event.listen('join.event',function(msg){
+				$('#users').append('<div id="' + msg.client.data.user_id + '">' + msg.client.data.user_name+'</div>');
 			});
 
-			app.BrainSocket.Event.listen('join.event',function(msg){
-				$('#users').append('<div id="' + msg.client.data.user_id + '">' + msg.client.data.user_id+': Waiting... </div>');
+			app.BrainSocket.Event.listen('pick.event',function(msg){
+				$('#users').append('<div>' + msg.client.data.user_id+' hat abgestimmt: '+msg.client.data.message+'</div>');
 			});
 		});
 	</script>

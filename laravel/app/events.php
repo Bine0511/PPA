@@ -16,7 +16,7 @@ Event::listen('app.error',function($client_data){
 
 //Selfmade Events
 Event::listen('vote.event',function($client_data){
-    return BrainSocket::message('vote.event',array('message'=>'A User voted!'));
+    return BrainSocket::message('pick.event',array('message'=>'A User has picked a card!'));
 });
 
 Event::listen('join.event',function($client_data){
