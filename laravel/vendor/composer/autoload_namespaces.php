@@ -24,6 +24,8 @@ return array(
     'Symfony\\Component\\Console\\' => array($vendorDir . '/symfony/console'),
     'Symfony\\Component\\BrowserKit\\' => array($vendorDir . '/symfony/browser-kit'),
     'Stack' => array($vendorDir . '/stack/builder/src'),
+    'Sidney\\Latchet' => array($vendorDir . '/sidney/latchet/src'),
+    'React\\ZMQ' => array($vendorDir . '/react/zmq/src'),
     'Ratchet' => array($vendorDir . '/cboden/ratchet/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log'),
     'Predis' => array($vendorDir . '/predis/predis/lib'),

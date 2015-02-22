@@ -123,6 +123,7 @@ return array(
 		'Illuminate\Workbench\WorkbenchServiceProvider',
 		'BrainSocket\BrainSocketServiceProvider',
 		'Thujohn\Pdf\PdfServiceProvider',
+		'Sidney\Latchet\LatchetServiceProvider'
 
 	),
 
@@ -192,6 +193,7 @@ return array(
 		'View'            => 'Illuminate\Support\Facades\View',
 		'BrainSocket'     => 'BrainSocket\BrainSocketFacade',
 		'PDF'             => 'Thujohn\Pdf\PdfFacade',
+		'Latchet'         => 'Sidney\Latchet\LatchetFacade'
 
 	),
 

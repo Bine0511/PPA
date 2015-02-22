@@ -6,7 +6,10 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"brainboxlabs/brain-socket": "v1.0.0",
-		"thujohn/pdf": "dev-master"
+		"thujohn/pdf": "dev-master",
+		"cboden/ratchet": "0.3.*",
+		"react/zmq": "0.3.*",
+		"sidney/latchet": "dev-master"
 	},
 	"autoload": {
 		"classmap": [

@@ -15,8 +15,12 @@ Event::listen('app.error',function($client_data){
 
 
 //Selfmade Events
-Event::listen('vote.event',function($client_data){
+Event::listen('pick.event',function($client_data){
     return BrainSocket::message('pick.event',array('message'=>'A User has picked a card!'));
+});
+
+Event::listen('votes.insert',function($client_data){
+    return BrainSocket::message('votes.insert',array('message'=>'The next story is coming!'));
 });
 
 Event::listen('join.event',function($client_data){

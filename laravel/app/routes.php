@@ -73,3 +73,5 @@ Route::get("/pdf", [
 	"as" => "pdf",
 	"uses" => "FileController@showPDF"
 ]);
+Latchet::connection('Connection');
+Latchet::topic('test-topic', 'TestTopic');
