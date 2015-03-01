@@ -950,59 +950,6 @@
         ]
     },
     {
-        "name": "brainboxlabs/brain-socket",
-        "version": "v1.0.0",
-        "version_normalized": "1.0.0.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/BrainBoxLabs/brain-socket.git",
-            "reference": "27347db38c0010c95f7a5ffb9e23e9fdf3b5433d"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/BrainBoxLabs/brain-socket/zipball/27347db38c0010c95f7a5ffb9e23e9fdf3b5433d",
-            "reference": "27347db38c0010c95f7a5ffb9e23e9fdf3b5433d",
-            "shasum": ""
-        },
-        "require": {
-            "cboden/ratchet": "0.3.*",
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "mockery/mockery": "0.8.0",
-            "phpunit/phpunit": "3.7.28"
-        },
-        "time": "2013-10-31 19:36:37",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "psr-0": {
-                "BrainSocket": "src"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Brain Box Labs",
-                "email": "andrew@brainboxmedia.ca",
-                "homepage": "http://www.brainboxmedia.ca/",
-                "role": "Developer"
-            }
-        ],
-        "description": "Websockets for event-driven Laravel apps.",
-        "homepage": "https://github.com/BrainBoxLabs/brain-socket",
-        "keywords": [
-            "Ratchet",
-            "WebSockets",
-            "artisan",
-            "events",
-            "laravel"
-        ]
-    },
-    {
         "name": "thujohn/pdf",
         "version": "dev-master",
         "version_normalized": "9999999-dev",
@@ -2326,5 +2273,53 @@
             }
         ],
         "description": "WebSockets with Laravel 4"
+    },
+    {
+        "name": "ollieread/multiauth",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/ollieread/multiauth.git",
+            "reference": "841b85cd7852a95b254f0244c0d0644df5eaf934"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/ollieread/multiauth/zipball/841b85cd7852a95b254f0244c0d0644df5eaf934",
+            "reference": "841b85cd7852a95b254f0244c0d0644df5eaf934",
+            "shasum": ""
+        },
+        "require": {
+            "illuminate/auth": "~4.1",
+            "illuminate/console": "~4.1",
+            "illuminate/database": "~4.1",
+            "illuminate/filesystem": "~4.1",
+            "illuminate/support": "~4.1",
+            "php": ">=5.3.0"
+        },
+        "time": "2014-12-08 14:56:41",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Ollieread\\Multiauth": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Ollie Read",
+                "email": "labs@ollieread.com"
+            }
+        ],
+        "description": "Multiple auth driver for Laravel",
+        "keywords": [
+            "auth",
+            "laravel",
+            "multi"
+        ]
     }
 ]

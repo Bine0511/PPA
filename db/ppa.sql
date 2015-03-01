@@ -29,7 +29,8 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `moderator` (
 `moderator_ID` int(15) NOT NULL,
   `moderator_name` varchar(50) NOT NULL,
-  `moderator_pw` varchar(150) NOT NULL
+  `moderator_pw` varchar(150) NOT NULL,
+  `remember_token` varchar(100) NOT NULL
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
@@ -55,7 +56,8 @@ CREATE TABLE IF NOT EXISTS `session` (
   `avg_sum` varchar(20) NOT NULL,
   `avg_sum_base` varchar(20) NOT NULL,
   `avg_time_div_avg` varchar(20) NOT NULL,
-  `sum_calc_time` varchar(10) NOT NULL
+  `sum_calc_time` varchar(10) NOT NULL,
+  `remember_token` varchar(100) NOT NULL
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
@@ -98,7 +100,8 @@ INSERT INTO `timevote` (`timevote_user_id`, `timevote_userstory_id`, `timevote_s
 CREATE TABLE IF NOT EXISTS `user` (
 `user_ID` int(15) NOT NULL,
   `user_name` varchar(50) NOT NULL,
-  `user_session_ID` int(15) NOT NULL
+  `user_session_ID` int(15) NOT NULL,
+  `remember_token` varchar(100) NOT NULL
 ) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --

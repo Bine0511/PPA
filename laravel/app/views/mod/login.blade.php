@@ -1,6 +1,6 @@
 @extends("layout")
 @section("content")
-	{{ Form::open(array('route' => array('mod/login'), 'method' => 'post')) }}
+	{{ Form::open() }}
 	@if (Session::has('login_errors'))
         <span class="error">Username or password incorrect.</span>
     @endif

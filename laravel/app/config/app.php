@@ -96,7 +96,7 @@ return array(
 	'providers' => array(
 
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
-		'Illuminate\Auth\AuthServiceProvider',
+		'Ollieread\Multiauth\MultiauthServiceProvider',
 		'Illuminate\Cache\CacheServiceProvider',
 		'Illuminate\Session\CommandsServiceProvider',
 		'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
@@ -121,7 +121,6 @@ return array(
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
 		'Illuminate\Workbench\WorkbenchServiceProvider',
-		'BrainSocket\BrainSocketServiceProvider',
 		'Thujohn\Pdf\PdfServiceProvider',
 		'Sidney\Latchet\LatchetServiceProvider'
 
@@ -191,7 +190,6 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-		'BrainSocket'     => 'BrainSocket\BrainSocketFacade',
 		'PDF'             => 'Thujohn\Pdf\PdfFacade',
 		'Latchet'         => 'Sidney\Latchet\LatchetFacade'
 

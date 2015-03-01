@@ -24,6 +24,10 @@ Route::any("/", [
 	"as" => "index",
 	"uses" => "HomeController@showWelcome"
 ]);
+Route::any("/info", [
+	"as" => "info",
+	"uses" => "HomeController@showInfo"
+]);
 
 Route::get("/login", [
 	"as" => "mod/login",
@@ -51,15 +55,23 @@ Route::any("/logout", [
 
 Route::get("/session", [
 	"as" => "session/create",
-	"uses" => "SessionController@getCreateSession"
+	"uses" => "PPSessionController@getCreateSession"
 ])->before('auth');
 
 Route::post("/session", [
 	"as" => "session/start",
-	"uses" => "SessionController@postCreateSession"
+	"uses" => "PPSessionController@postCreateSession"
 ])->before('auth');
 
+Route::get("/session/start", [
+	"as" => "session/start",
+	"uses" => "PPSessionController@showSession"
+])->before('guest');
 
+Route::post("/session/start", [
+	"as" => "session/start",
+	"uses" => "PPSessionController@postSession"
+]);
 
 
 

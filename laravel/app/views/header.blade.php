@@ -1,7 +1,7 @@
 @section("header")
 	<div class="header">
 			<div class="menu">
-			@if (Auth::check())
+			@if (Auth::Mod()->check())
 				<a href="{{ URL::route('mod/logout') }}">
 					logout
 				</a>

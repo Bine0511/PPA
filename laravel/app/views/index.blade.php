@@ -20,7 +20,7 @@
  
 	{{ Form::close() }}
 
-	<a href="#">Über Planning Poker App</a>
-	<a href="#">Wie funktioniert Planning Poker?</a>
+	<a href="{{ URL::route('info') }}#ueber">Über Planning Poker App</a>
+	<a href="{{ URL::route('info') }}#wie">Wie funktioniert Planning Poker?</a>
 </div>
 @stop

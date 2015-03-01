@@ -1,7 +1,7 @@
 <?php
 use \Sidney\Latchet\BaseTopic;
 
-class TestTopic extends BaseTopic {
+class SessionRoom extends BaseTopic {
 
 	public function subscribe($connection, $topic)
 	{
