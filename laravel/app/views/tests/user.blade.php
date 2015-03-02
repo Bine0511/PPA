@@ -5,9 +5,34 @@
 
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
-	<script src="js/brain-socket.min.js"></script>
+	<script src="js/autobahn.min.js"></script>
 	<script type="text/javascript" charset="utf-8">
-		$(function(){
+		
+		window.onload = function(){
+			conn = new ab.Session(
+		    	'ws://localhost:8080',
+			    function() { // Once the connection has been established
+			        conn.subscribe('sessions/lobby', function(topic, event) {
+			            console.log('subscribed ');
+			            console.log(event);
+			        });
+			        var message = new Object();
+			        message.user_id = Math.floor((Math.random()*1000)+1);
+			        message.event
+			        conn.publish('sessions/lobby', );
+			    },
+			    function() {
+			        // When the connection is closed
+			        console.log('WebSocket connection closed');
+			    },
+			    {
+			        // Additional parameters, we're ignoring the WAMP sub-protocol for older browsers
+			        'skipSubprotocolCheck': true
+			    }
+			);
+		}
+
+		/*$(function(){
 
 			var fake_user_id = Math.floor((Math.random()*1000)+1);
 
@@ -45,6 +70,6 @@
 				);
 			}
 			);
-		});
+		});*/
 	</script>
 @stop

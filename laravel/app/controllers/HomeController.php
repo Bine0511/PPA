@@ -6,10 +6,10 @@ class HomeController extends BaseController {
 	// Tests
 
 	public function showModTest(){
-		return View::make('session/moderator');
+		return View::make('tests/moderator');
 	}
 	public function showUserTest(){
-		return View::make('session/user');
+		return View::make('tests/user');
 	}
 
 	/*

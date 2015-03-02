@@ -75,7 +75,7 @@ return array(
 	| WebSocket.loadFlashPolicyFile("xmlsocket://myhost.com:61011");
 	*/
 
-	'flashPort' => 843,
+	'flashPort' => 8843,
 	
 	/*
 	|--------------------------------------------------------------------------
