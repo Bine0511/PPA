@@ -1,0 +1,160 @@
+@charset "utf-8";
+/* CSS Document */
+body {
+    width: 100%;
+    font-family: Arial;
+    color: #000;
+    background-color: #CCC;
+	margin-top: 125px;
+}
+
+html {
+    width: 100%;
+}
+/*.brand-heading{
+	color:#C00;	
+}
+*/
+.navlogo{
+	width: 80%;
+	height:80%;
+	margin-right: -7px;
+}
+
+.bild {
+	width: 10%;
+	height: 10%;	
+}
+
+#nav{
+	display:none;
+}
+
+#nav-heading{
+	font-size: 90%;
+	font-weight:bold;
+	margin-top:2%;
+	color:#CCC;	
+}
+
+.form-signin{
+	max-width:400px;
+	padding: 15px;
+	margin: 0 auto;
+}
+.signin-input{
+	padding: 10px;
+	line-height: 1.4;
+	height:auto;
+	font-size:16px;
+	margin-bottom: 10px;
+	margin-top: 10px;
+}
+
+.card{
+	width:100%;
+    display:block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis; 
+}
+
+.selected{
+	border:solid 4px #000;
+    border-radius: 7px;
+	background-color: #000;
+	margin:5px;
+}
+
+.boxcontainer{
+	padding: 10px 10px;
+}
+
+.box{
+	background-color:#BBB !important;
+	text-align: center;
+	padding:2px 10px 10px 10px;
+}
+
+.alert{
+	text-align: center;
+}
+
+#storybox{
+	margin-left: auto;
+	margin-right: auto;
+	display:inline-block;
+	padding: 15px !important;
+}
+
+.controlpanel{
+	text-align: center;
+}
+
+/*carousel*/
+
+#wrap {
+/* fixed width, centered in viewport */
+width: 980px;
+left: -490px;
+margin-left: 50%;
+position: relative;
+}
+#showcase {
+width: 100%;
+height: 460px;
+background: #16235e; /* Old browsers */
+background: -moz-linear-gradient(top, #16235e 0%, #020223 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #16235e), color-stop(100%, #020223)); /* Chrome, Safari4+ */
+background: -webkit-linear-gradient(top, #16235e 0%, #020223 100%); /* Chrome10+, Safari5.1+ */
+background: -o-linear-gradient(top, #16235e 0%, #020223 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #16235e 0%, #020223 100%); /* IE10+ */
+background: linear-gradient(to bottom, #16235e 0%, #020223 100%); /* W3C */
+-webkit-box-shadow: 0px 0px 13px 5px #DB1242;
+-moz-box-shadow: 0px 0px 13px 5px #DB1242;
+box-shadow: 0px 0px 13px 5px #DB1242;
+border-radius: 8px;
+margin-top: 12px;
+visibility: hidden;
+}
+#showcase img {
+cursor: pointer;
+}
+#item-title {
+color: #F31414;
+font-size: 29px;
+letter-spacing: 0.13em;
+text-shadow: 1px 1px 6px #C72B2B;
+text-align: center;
+margin-top: 30px;
+margin-bottom: 22px;
+}
+.nav {
+text-align: center;
+}
+.nav > button {
+width: 64px;
+height: 36px;
+color: #666;
+font: bold 16px arial;
+text-decoration: none;
+text-align: center;
+margin: 5px;
+text-shadow: 0px 1px 0px #f5f5f5;
+background: #f6f6f6;
+border: solid 2px rgba(0, 0, 0, 0.4);
+-webkit-border-radius: 5px;
+-moz-border-radius: 5px;
+border-radius: 5px;
+-webkit-box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.4);
+-moz-box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.4);
+box-shadow: 0 0 9px 1px rgba(0, 0, 0, 0.4);
+cursor: pointer;
+}
+.nav > button:active, .nav > button.down {
+background: #dfdfdf;
+border: solid 2px rgba(0, 0, 0, 0.6);
+box-shadow: none;
+}
+
+/*carousel ende*/

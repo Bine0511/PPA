@@ -7,8 +7,9 @@ class Connection extends BaseConnection {
 	{
 		$connection->PPA = new \StdClass;
     	$connection->PPA->name  = $connection->WAMP->sessionId;
-		echo "New connection established. User: \n";
+		echo "New connection established. User:";
 		echo $connection->PPA->name;
+		echo "\n";
 	}
 
 	public function close($connection)

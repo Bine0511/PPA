@@ -8,7 +8,10 @@ Route::get("/modtest", [
 Route::get("/usertest", [
 	"uses" => "HomeController@showUserTest"
 ]);
-
+Route::get("/sessiontest", [
+	"as" => "session/start",
+	"uses" => "PPSessionController@showSession"
+]);
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -59,7 +62,7 @@ Route::get("/session", [
 ])->before('auth');
 
 Route::post("/session", [
-	"as" => "session/start",
+	"as" => "session/create",
 	"uses" => "PPSessionController@postCreateSession"
 ])->before('auth');
 

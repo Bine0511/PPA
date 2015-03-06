@@ -1,3 +1,2 @@
 @section("footer")
-
 @show
