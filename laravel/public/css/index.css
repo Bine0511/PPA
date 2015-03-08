@@ -80,11 +80,18 @@ html {
 	text-align: center;
 }
 
+.cardbox-disabled{
+    pointer-events: none;
+}
+.item-disabled{
+    opacity:0.5;
+}
+
 #storybox{
 	margin-left: auto;
 	margin-right: auto;
 	display:inline-block;
-	padding: 15px !important;
+	padding: 5px 15px 15px 15px !important; /*TOP RIGHT BOTTOM LEFT*/
 }
 
 .controlpanel{

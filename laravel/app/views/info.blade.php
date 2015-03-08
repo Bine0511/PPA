@@ -12,7 +12,10 @@
 		<h1>Wer kann die App nutzen?</h1>
 			<p>Die App kann jeder nutzen der Planning Poker durchführen möchte. Um eine Anwendung zu starten, muss eine Person sich als Moderator registrieren. Als abstimmender User benötigt man das vom Moderator erstelle Session-Passwort und den dazu gehörigen Session-Namen um der Planning Poker Session beitreten zu können. Außerdem muss sich der User zur Identifikation einen Nickname geben.</p>
 </div>
+@stop
+
+@section("js")
 <script>
-$("#li_aboutus").toggleClass( "active", true);
+	$("#li_aboutus").toggleClass( "active", true);
 </script>
 @stop

@@ -33,8 +33,9 @@
 		@yield("content")
 	</div>
 	@include("footer")
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
 	<script src="packages/owlcarousel/owl.carousel.js"></script>
+	@yield("js")
 </body>
 </html>

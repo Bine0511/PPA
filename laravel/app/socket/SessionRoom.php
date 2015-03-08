@@ -8,10 +8,14 @@ class SessionRoom extends BaseTopic {
 	    echo "Session:";
 	    echo $roomid;
 	    echo "\n";
+	    $connection->PPA->room = $roomid;
 	}
 
 	public function publish($connection, $topic, $message, array $exclude, array $eligible)
 	{
+
+		$json = json_decode($message);
+		$connection->PPA->user_id = $json->user_id;
 		$this->broadcast($topic, $message);
 	}
 

@@ -16,10 +16,12 @@
 	{{ Form::label ('password', 'Passwort', array('class' => 'sr-only')); }}
 	{{ Form::password ('password', array('id' => 'password', 'class' => 'form-control signin-input', 'placeholder' =>'Passwort'));}}
 
-	{{ Form::submit('Login', array('class' => 'btn btn-lg btn-primary btn-block')); }}
+	{{ Form::submit('Login', array('class' => 'btn btn-lg btn-danger btn-block')); }}
 	{{ Form::close () }}
+@stop
 
+@section("js")
 <script>
-$("#li_login").toggleClass( "active", true);
+	$("#li_login").toggleClass( "active", true);
 </script>
 @stop

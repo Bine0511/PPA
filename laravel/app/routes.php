@@ -9,8 +9,8 @@ Route::get("/usertest", [
 	"uses" => "HomeController@showUserTest"
 ]);
 Route::get("/sessiontest", [
-	"as" => "session/start",
-	"uses" => "PPSessionController@showSession"
+	"as" => "session/create",
+	"uses" => "PPSessionController@getCreateSession"
 ]);
 /*
 |--------------------------------------------------------------------------

@@ -13,10 +13,12 @@
 	{{ Form::label ('pwd_confirmation', 'Passwort wiederholen', array('class' => 'sr-only')); }}
 	{{ Form::password ('pwd_confirmation', array('id' => 'pwd_confirmation', 'class' => 'form-control signin-input', 'placeholder' =>'Passwort wiederholen'));}}
 
-	{{ Form::submit('Registrieren', array('class' => 'btn btn-lg btn-success btn-block')); }}
+	{{ Form::submit('Registrieren', array('class' => 'btn btn-lg btn-danger btn-block')); }}
 	{{ Form::close () }}
+@stop
 
-	<script>
-$("#li_register").toggleClass( "active", true);
+@section("js")
+<script>
+	$("#li_register").toggleClass( "active", true);
 </script>
 @stop
