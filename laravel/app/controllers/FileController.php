@@ -148,11 +148,23 @@ class FileController extends Controller
 	$this->sumCalcTime($sess);
 
 //Vote Tabelle
+	$html = '<html><head><meta charset="utf-8"></head><body style="">';
+	$html = $html.'<h1 style="font-size: 50px;vertical-align:center;">Ergebnis</h1>';
+	$sessio = DB::table('session')->where('session_ID','=',$sess)->get();
+	foreach ($sessio as $sessio) {
+		$moderator = DB::table('moderator')->where('moderator_ID','=',$sessio->session_moderator_ID)->get();
+		foreach ($moderator as $moderator) {
+			$html = $html.$moderator->moderator_name;
+		}
+	}
+	
+
+	/*
 	$user = DB::table('user')->where('user_session_ID','=',$sess)->get();
 	$userstory = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
 
 
-	$html = '<html><head><meta charset="utf-8"></head><body><table style="text-align:right; border: 2px solid #000; width:100%;"><tr style="border-bottom: 3px solid #000"><td><b>Punkte Schätzung</b></td>';
+	$html = $html.'<table style="text-align:right; border: 2px solid #000; width:100%;"><tr style="border-bottom: 3px solid #000"><td><b>Punkte Schätzung</b></td>';
 	foreach ($userstory as $userstory) {
 		$html = $html . '<td width="">'.$userstory->userstory_name.'</td>';
 	}
@@ -232,7 +244,7 @@ class FileController extends Controller
 		$html = $html.'<td><b>'.$sess->sum_calc_time.'</b></td></tr>';
 	}
 	$html = $html . '</table><br>';
-
+*/
 		$html = $html . '</body></html>';
 	return PDF::load($html, 'A4', 'landscape')->show();
 }
