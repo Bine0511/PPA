@@ -4,48 +4,53 @@ class FileController extends Controller
 {
 
 
-
+//Durchschnitt der User Story Punkte berechnen
 	public function calculateAvg($sess){
+		//userstories der aktuellen session
 		$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
+		//für jede userstory den durchschnitt der votes berechnen
+
 		foreach ($ustory as $ustory) {
 			$sumvote = 0;
 			$avgUs = 0;
 			
 			$count = 0;
-			$vote = DB::table('vote')->where('vote_userstory_ID', '=', $ustory->userstory_ID)->get();
+			//alle votes der aktuellen userstory
+			$vote = DB::table('vote')->where('vote_userstory_ID', '=', $ustory->userstory_ID)->where('vote_session_ID','=',$sess)->get();
 			foreach ($vote as $vote) {
 				if($vote->value != '?' && $vote->value != 'coffee'){
+				//summe und anzahl der votes die nicht '?' oder 'coffee' sind
 				$sumvote = $sumvote + $vote->value;
 				$count += 1;
 			}
 			}
-			
+			//durchschnitt berechnen
 			$avgUs = $sumvote/$count;
-			DB::table('userstory')->where('userstory_ID', '=', $ustory->userstory_ID)->update(array('userstory_average' => $avgUs));
+			$test = DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_ID', '=', $ustory->userstory_ID)->get();
+			
+			DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_ID', '=', $ustory->userstory_ID)->update(array('userstory_average' => $avgUs));
 			
 		}
 	}
 
+//Durchschnitt der Time votes pro Userstory berechnen
 	public function calcTimeAvg($sess){
 		$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
 		foreach ($ustory as $ustory) {
 			$sumTvote = 0;
 			$avgTUs = 0;
 			$Tcount = 0;
-			$timevote = DB::table('timevote')->where('timevote_userstory_ID', '=', $ustory->userstory_ID)->whereNotNull('timevote_value')->get();
+			$timevote = DB::table('timevote')->where('timevote_userstory_ID', '=', $ustory->userstory_ID)->where('timevote_session_ID','=',$sess)->whereNotNull('timevote_value')->get();
 			foreach ($timevote as $timevote) {
 				if($timevote->timevote_value != '?'){
 					$sumTvote = $sumTvote + $timevote->timevote_value;
 					$Tcount += 1;
 				}
-			}
-			if($Tcount != NULL){
+			} 
 				$avgTUs = $sumTvote/$Tcount;
-			}else{
-				$avgTUs = 0;
-			}
+
 			
-			DB::table('userstory')->where('userstory_ID', '=', $ustory->userstory_ID)->update(array('userstory_time_average' => $avgTUs));
+			DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_ID', '=', $ustory->userstory_ID)->update(array('userstory_time_average' => $avgTUs));
 	}
 }
 
@@ -145,6 +150,7 @@ class FileController extends Controller
 	
 	foreach ($user as $user)
 	{$html = $html . '<tr><td>' . $user->user_name . '</td>';
+
 		$use = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
 		foreach($use as $use){
 			$vote = DB::table('vote')->where('vote_user_ID','=',$user->user_ID)->where('vote_userstory_ID', '=', $use->userstory_ID)->get();
