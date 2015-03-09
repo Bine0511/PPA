@@ -84,7 +84,7 @@ Route::get("/pages/{page}", [
 	"uses" => "HomeController@showPage"
 ]);
 
-Route::get("/pdf", [
+Route::get("/pdf/{sess}", [
 	"as" => "pdf",
 	"uses" => "FileController@showPDF"
 ]);
