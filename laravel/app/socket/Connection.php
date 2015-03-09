@@ -28,6 +28,6 @@ class Connection extends BaseConnection {
 	{
 		//close the connection
 		$connection->close();
-		echo $exception->getMessage() + "\n";
+		echo $exception->getMessage() + "Outch! \n";
 	}
 }

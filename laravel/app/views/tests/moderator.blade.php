@@ -17,12 +17,16 @@
 	</div>
 	<div id="userbox" class="row">
     </div>
+@stop
 
+@section("js")
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
 	<script src="js/autobahn.min.js"></script>
 	<script type="text/javascript" charset="utf-8">
 		var id = Math.floor((Math.random()*1000)+1);
+		var sessionid = 'sessions/lobby';
+		var votes = {};
 		window.onload = function(){
 			conn = new ab.Session(
 		    	'ws://localhost:8080',
@@ -47,17 +51,28 @@
     												</div></div>");
 			        			break;
 			        		case "pick":
+			        			//change image
 			        			var image_id = '#img_' + message.user_id;
 			        			$(image_id).attr("src", message.val);
+			        			//store value
+			        			var votevalue = message.val.split("\/")[1].split(".")[0];
+								votes[message.user_id] = votevalue;
 			        			break;
 			        		case "leave":
 			        			var container_id = '#container_' + message.user_id;
 			        			$(container_id).remove();
 			        			break;
+			        		case "userlist":
+
 			        		default:
 			        			break;
 			        	}
 			        });
+			        var message = {};
+			        message.user_id = id;
+			        message.act = 'modjoin';
+		    		console.log("Sending: " + JSON.stringify(message));
+			        conn.publish(sessionid, JSON.stringify(message));
 			    },
 			    function() {
 			        // When the connection is closed
@@ -77,48 +92,29 @@
 					case "Start":
 		    			message.act = 'start';
 						$(".bt_swap").html('Stop');
+						$(".bt_next").addClass('button-disabled');
 						break;
 					case "Stop":
 		    			message.act = 'stop';
 						$(".bt_swap").html('Wiederholen');
+						$(".bt_next").removeClass('button-disabled');
 						break;
 					case "Wiederholen":
 		    			message.act = 'again';
 						$(".bt_swap").html('Start');
+						$(".bt_next").addClass('button-disabled');
 						break;
 				}
 		    	console.log("Sending: " + JSON.stringify(message));
 				conn.publish('sessions/lobby', JSON.stringify(message));
 			});
 
-			$(".bt_stop").click(function(){
-				$(this).addClass('bt_again');
-				$(this).removeClass('bt_stop');
-		    	var message = {};
-		    	message.user_id = id;
-		    	message.act = 'stop';
-		    	console.log("Sending: " + JSON.stringify(message));
-				conn.publish('sessions/lobby', JSON.stringify(message));
-			});
-
-			$(".bt_again").click(function(){
-				$(this).addClass('bt_stop');
-				$(this).removeClass('bt_again');
-		    	var message = {};
-		    	message.user_id = id;
-		    	message.act = 'again';
-		    	console.log("Sending: " + JSON.stringify(message));
-				conn.publish('sessions/lobby', JSON.stringify(message));
-			});
-
 			$(".bt_next").click(function(){
-				$(".bt_swap").removeClass('bt_start');
-				$(".bt_swap").removeClass('bt_stop');
-				$(".bt_swap").removeClass('bt_again');
-				$(".bt_swap").addClass('bt_stop');
+				$(".bt_next").addClass('button-disabled');
 		    	var message = {};
 		    	message.user_id = id;
-		    	message.act = 'again';
+		    	message.act = 'next';
+		    	message.votes = votes;
 		    	console.log("Sending: " + JSON.stringify(message));
 				conn.publish('sessions/lobby', JSON.stringify(message));
 			});
