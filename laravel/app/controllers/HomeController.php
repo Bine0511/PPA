@@ -32,4 +32,8 @@ class HomeController extends BaseController {
 		return View::make('info');
 	}
 
+	public function showLink(){
+		return View::make('link');
+	}
+
 }

@@ -28,12 +28,13 @@ class FileController extends Controller
 			$avgUs = $sumvote/$count;
 			$test = DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_ID', '=', $ustory->userstory_ID)->get();
 			
+			//eintragen des ergebnisses in der DB
 			DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_ID', '=', $ustory->userstory_ID)->update(array('userstory_average' => $avgUs));
 			
 		}
 	}
 
-//Durchschnitt der Time votes pro Userstory berechnen
+//Durchschnitt der Time votes pro Userstory berechnen, s.o.
 	public function calcTimeAvg($sess){
 		$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
 		foreach ($ustory as $ustory) {
@@ -54,6 +55,7 @@ class FileController extends Controller
 	}
 }
 
+//Summe der Durchschnitte
 	public function sumAvg($sess){
 		$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
 		$sum = 0;
@@ -63,6 +65,7 @@ class FileController extends Controller
 		DB::table('session')->where('session_ID','=',$sess)->update(array('avg_sum'=>$sum));
 	}
 
+//Durchschnittswert der Votes der Base-Userstory
 	public function sumAvgBase($sess){
 		$baseAvg = 0;
 		$baseSum = 0;
@@ -80,6 +83,7 @@ class FileController extends Controller
 		
 	}
 
+//Zeit Durchschnitt durch Vote Durchschnitt
 	public function timeDivAvg($sess){
 		$userstory = DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_time_average','>',0)->get();
 		foreach ($userstory as $userstory) {
@@ -88,6 +92,7 @@ class FileController extends Controller
 		}
 	}
 
+//Durchschnitt der timeDivAvg
 	public function avgTimeDivAvg($sess){
 			$sumTDA = 0;
 			$avgTDA = 0;
@@ -103,17 +108,22 @@ class FileController extends Controller
 		
 	}
 
+//Zeit berechnen
 	public function calcTime($sess){
+		//aktuelle session
 		$sessi = DB::table('session')->where('session_id','=',$sess)->get();
 		foreach ($sessi as $sessi) {
 			$us = DB::table('userstory')->get();
+			//alle userstories
 			foreach ($us as $us) {
+				//durchschnitts votes der userstory * Durchschnitt der Zeit pro SP
 				$calcTime = $us->userstory_average*$sessi->avg_time_div_avg;
 				DB::table('userstory')->where('userstory_ID','=',$us->userstory_ID)->update(array('calc_time' => $calcTime ));
 			}
 		}
 	}
 
+//summe der berechneten zeiten
 	public function sumCalcTime($sess){
 		$sessi = DB::table('session')->where('session_id','=',$sess)->get();
 		foreach ($sessi as $sessi) {

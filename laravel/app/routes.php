@@ -89,5 +89,15 @@ Route::get("/pdf/{sess}", [
 	"uses" => "FileController@showPDF"
 ]);
 
+Route::post("/pdf/{sess}", [
+	"as" => "pdf",
+	"uses" => "FileController@showPDF"
+]);
+
+Route::get("/link", [
+	"as" => "pdf",
+	"uses" => "HomeController@showLink"
+]);
+
 Latchet::connection('Connection');
 Latchet::topic('sessions/{session_name}', 'SessionRoom');
