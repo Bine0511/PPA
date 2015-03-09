@@ -148,13 +148,46 @@ class FileController extends Controller
 	$this->sumCalcTime($sess);
 
 //Vote Tabelle
-	$html = '<html><head><meta charset="utf-8"></head><body style="">';
-	$html = $html.'<h1 style="font-size: 50px;vertical-align:center;">Ergebnis</h1>';
+	$html = '<html><head><meta charset="utf-8"><style>.family{font-family:Helvetica;} h1{font-size: 50px;} .table{margin:auto;}</style></head><body class="family">';
+	$html = $html.'<h1>Ergebnis</h1>';
 	$sessio = DB::table('session')->where('session_ID','=',$sess)->get();
 	foreach ($sessio as $sessio) {
+	//Teilnehmer Tabelle
+		$html = $html.'<table>';
+
+		//moderator ausgeben
 		$moderator = DB::table('moderator')->where('moderator_ID','=',$sessio->session_moderator_ID)->get();
 		foreach ($moderator as $moderator) {
-			$html = $html.$moderator->moderator_name;
+			$html = $html.'<tr><td style="font-weight:bold;color:#9b0000;font-size:28px;">'.$moderator->moderator_name.'</td></tr>';
+		}
+
+		//alle user ausgeben
+		$user = DB::table('user')->where('user_session_ID','=',$sessio->session_ID)->get();
+		foreach ($user as $user) {
+			$html = $html.'<tr><td style="font-size:28px;">'.$user->user_name.'</td></tr>';
+		}
+
+		$html = $html.'</table>';
+
+	//Vote Tabellen
+		//Userstory Tabellen erstellen
+		$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sessio->session_ID)->get();
+		foreach ($ustory as $ustory) {
+			$html = $html.'<table><thead><tr><td>User</td><td>'.$ustory->$userstory_name.'</td></tr></thead>';
+
+
+			//alle User
+			$user = DB::table('user')->where('user_session_ID','=',$sessio->session_ID)->get();
+			foreach ($user as $user) {
+				//vote des users zur userstory
+				$vote = DB::table('vote')->where('vote_user_ID','=',$user->user_ID)->where('vote_userstory_ID','=',$ustory->userstory_ID)->get();
+				foreach ($vote as $vote) {
+					$html = $html.'<tr><td>'.$user->user_name.'</td><td>'.$vote->value.'</td></tr>';
+				}
+				
+			}
+
+			$html = $html.'</table>';
 		}
 	}
 	
