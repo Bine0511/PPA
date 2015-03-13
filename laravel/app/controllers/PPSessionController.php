@@ -46,7 +46,7 @@ class PPSessionController extends Controller
 
 
     public function showSession($id){
-        return View::make('sesseion/start', array('session_id' => $id));
+        return View::make('session/start', array('session_id' => $id));
     }
 
     public function postSession(){

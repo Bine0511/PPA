@@ -10,7 +10,7 @@
 				{{ Form::button('Start', array('class' => 'btn btn-lg btn-default btn-block bt_swap bt_start')); }}
 				</div>
 				<div class="col-md-3 col-sm-4 col-xs-12 ">
-				{{ Form::button('N&auml;chste User-Story', array('class' => 'btn btn-lg btn-default btn-block bt_next')); }}
+				{{ Form::button('N&auml;chste User-Story', array('class' => 'btn btn-lg btn-default btn-block bt_next button-disabled')); }}
 				</div>
 			</div>
 		</div>
@@ -26,7 +26,6 @@
 	<script type="text/javascript" charset="utf-8">
 		var id = Math.floor((Math.random()*1000)+1);
 		var sessionid = 'sessions/lobby';
-		var votes = {};
 		window.onload = function(){
 			conn = new ab.Session(
 		    	'ws://localhost:8080',
@@ -54,9 +53,6 @@
 			        			//change image
 			        			var image_id = '#img_' + message.user_id;
 			        			$(image_id).attr("src", message.val);
-			        			//store value
-			        			var votevalue = message.val.split("\/")[1].split(".")[0];
-								votes[message.user_id] = votevalue;
 			        			break;
 			        		case "leave":
 			        			var container_id = '#container_' + message.user_id;
@@ -111,10 +107,10 @@
 
 			$(".bt_next").click(function(){
 				$(".bt_next").addClass('button-disabled');
+				$(".bt_swap").html('Start');
 		    	var message = {};
 		    	message.user_id = id;
 		    	message.act = 'next';
-		    	message.votes = votes;
 		    	console.log("Sending: " + JSON.stringify(message));
 				conn.publish('sessions/lobby', JSON.stringify(message));
 			});

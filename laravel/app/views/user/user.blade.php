@@ -7,6 +7,11 @@
 			</div>
 		</div>
 	</div>
+	<div class="row">
+		<div class="controlpanel col-md-12 col-sm-12 col-xs-12">
+			<h3 id="statusmessage">Warten auf Moderator....</h3>
+		</div>
+	</div>
 	<div id="cardbox" class="owl-carousel cardbox-disabled">
 		<div class="item item-disabled"><img src="images/0.png" alt="Card 0"></div>
 		<div class="item item-disabled"><img src="images/0,5.png" alt="Card 0,5"></div>
@@ -43,22 +48,47 @@
 		    				console.log("Received JSON: " + msg);
 			        	}
 			        	switch(message.act){
+			        		case "joininfo":
+			        			switch (message.status){
+			        				case 0:
+			        					$("#cardbox").addClass('cardbox-disabled');
+										$(".item").addClass('item-disabled');
+		    							$("#statusmessage").text("Warten auf Moderator...");
+			        					break;
+			        				case 1:
+										$("#cardbox").removeClass('cardbox-disabled');
+										$(".item").removeClass('item-disabled');
+										console.log("ena");
+				    					$("#statusmessage").text("Abstimmen!");
+			        					break;
+			        				case 2:
+			        					$("#cardbox").addClass('cardbox-disabled');
+										$(".item").addClass('item-disabled');
+				    					$("#statusmessage").text("Moderator hat die Kartenauswahl gesperrt");
+			        					break;
+			        				default:
+			        					break;;
+			        			}
+			        			$("#userstory").text(message.story);
+			        			break;
 			    			case "start":
 								$("#cardbox").removeClass('cardbox-disabled');
 								$(".item").removeClass('item-disabled');
-		    					console.log("enabled");
+		    					$("#statusmessage").text("Abstimmen!");
 				        		break;
 				        	case "stop":
 								$("#cardbox").addClass('cardbox-disabled');
 								$(".item").addClass('item-disabled');
-		    					console.log("disabled");
+		    					$("#statusmessage").text("Moderator hat die Kartenauswahl gesperrt");
 								break;
 				        	case "again":
+				        		$("#cardbox").addClass('cardbox-disabled');
+								$(".item").addClass('item-disabled');
+		    					$("#statusmessage").text("Warten auf Moderator...");
 				        		break;
 			        		default:
 			        			break;
 		        		}
-			            
 			        });
 			        var message = {};
 			        message.user_id = id;

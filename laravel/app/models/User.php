@@ -5,20 +5,23 @@ use Illuminate\Auth\Reminders\RemindableInterface;
 
 class User extends Eloquent implements UserInterface, RemindableInterface {
 	
+	protected $fillable = [ 'user_ID', 'user_name', 'user_session_ID', 'user_session_pw' ];
+	
 	public $timestamps = false;
 	/**
 	 * The database table used by the model.
 	 *
 	 * @var string
 	 */
+	protected $hidden = ['user_session_pw'];
 	protected $table = 'user';
+    protected $primaryKey = "user_ID";
+    public static $rules = array(
+        'user_name' => 'required',
+        'user_session_ID' => 'required',
+        'user_session_pw' => 'required'
+    ); 
 
-	/**
-	 * The attributes excluded from the model's JSON form.
-	 *
-	 * @var array
-	 */
-	protected $hidden = ['password'];
 
 	/**
 	 * Get the unique identifier for the user.
@@ -26,7 +29,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 * @return mixed
 	 */
 	public function getAuthIdentifier(){
-		return $this->getKey();
+		return $this->user_ID;
 	}
 
 	/**
@@ -35,7 +38,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 * @return string
 	 */
 	public function getAuthPassword(){
-		return $this->password;
+		return $this->user_session_pw;
 	}
 
 	public function getRememberToken(){

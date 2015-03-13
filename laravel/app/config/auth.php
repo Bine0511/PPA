@@ -11,10 +11,16 @@ return array(
 		),
 		'User' => array(
 			'driver' => 'eloquent',
-			'table' => 'user',
-			'username' => 'user_name',
-			'password' => 'user_session_pw'
-		)
+			'model' => 'User',
+			'username' => 'ppuser_name',
+			'password' => 'ppuser_session_pw'
+		),
+		'PPSession' => array(
+			'driver' => 'eloquent',
+			'model' => 'PPSession',
+			'username' => 'session_name',
+			'password' => 'session_pw'
+		),
 	),
 
 	'reminder' => array(

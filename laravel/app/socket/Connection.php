@@ -15,10 +15,10 @@ class Connection extends BaseConnection {
 	public function close($connection)
 	{
 		$arr = array('user_id' => $connection->PPA->user_id, 'act' => 'leave');
-		$room = $connection->PPA->room;
+		$room = "sessions/" . $connection->PPA->room;
 		$json = json_encode($arr);
 
-		Latchet::publish('sessions/lobby', $arr);
+		Latchet::publish($room, $arr);
 		echo "Connection closed. User: ";
 		echo $connection->PPA->name;
 		echo "\n";
@@ -28,6 +28,6 @@ class Connection extends BaseConnection {
 	{
 		//close the connection
 		$connection->close();
-		echo $exception->getMessage() + "Outch! \n";
+		echo "Outch! - " . $exception->getMessage() . "\n";
 	}
 }
