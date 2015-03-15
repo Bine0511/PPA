@@ -3,11 +3,11 @@
 	<div class="row">
 		<div class="controlpanel col-md-12 col-sm-12 col-xs-12">
 			<div id="storybox" class="jumbotron">
-				<h3 id="userstory">Das ist eine tolle Userstory</h3>
+				<h3 id="userstory"></h3>
 			</div>
 			<div id="controlbox">
 				<div class="col-md-3 col-md-offset-3 col-sm-4 col-sm-offset-2 col-xs-12">
-				{{ Form::button('Start', array('class' => 'btn btn-lg btn-default btn-block bt_swap bt_start')); }}
+				{{ Form::button('Start', array('class' => 'btn btn-lg btn-default btn-block bt_swap bt_start button-disabled')); }}
 				</div>
 				<div class="col-md-3 col-sm-4 col-xs-12 ">
 				{{ Form::button('N&auml;chste User-Story', array('class' => 'btn btn-lg btn-default btn-block bt_next button-disabled')); }}
@@ -25,12 +25,12 @@
 	<script src="js/autobahn.min.js"></script>
 	<script type="text/javascript" charset="utf-8">
 		var id = Math.floor((Math.random()*1000)+1);
-		var sessionid = 'sessions/lobby';
+		var sessionid = 'sessions/666';
 		window.onload = function(){
 			conn = new ab.Session(
 		    	'ws://localhost:8080',
 			    function() { // Once the connection has been established
-			        conn.subscribe('sessions/lobby', function(topic, msg) {
+			        conn.subscribe(sessionid, function(topic, msg) {
 			        	var message;
 			        	if(msg.topic){
 			        		message = msg;
@@ -41,8 +41,36 @@
 			        	}
 
 			        	switch(message.act){
+			        		case "joininfo":
+								$(".bt_swap").removeClass('button-disabled');
+			        			switch (message.status){
+			        				case 0:
+										$(".bt_swap").html('Start');
+										$(".bt_next").addClass('button-disabled');
+			        					break;
+			        				case 1:
+										$(".bt_swap").html('Stop');
+										$(".bt_next").addClass('button-disabled');
+			        					break;
+			        				case 2:
+										$(".bt_swap").html('Wiederholen');
+										$(".bt_next").removeClass('button-disabled');
+			        					break;
+			        				default:
+			        					break;;
+			        			}
+			        			$("#userstory").text(message.story);
+			        			break;
 			        		case "join":
-			        			userid= message.user_id;
+			        			userid=message.user_id;
+			        			$('#userbox').append("<div id='container_" + userid + "' class='boxcontainer col-md-2 col-sm-3 col-xs-6'> \
+			        								<div id='box_" + userid + "' class='box'> \
+    												<h3><span class='card label label-default'>User" + userid + "</span></h3> \
+    												<img id='img_" + userid + "' class='card' src='images/leer.png'/> \
+    												</div></div>");
+			        			break;
+			        		case "prejoin":
+			        			userid=message.user_id;
 			        			$('#userbox').append("<div id='container_" + userid + "' class='boxcontainer col-md-2 col-sm-3 col-xs-6'> \
 			        								<div id='box_" + userid + "' class='box'> \
     												<h3><span class='card label label-default'>User" + userid + "</span></h3> \
@@ -58,8 +86,12 @@
 			        			var container_id = '#container_' + message.user_id;
 			        			$(container_id).remove();
 			        			break;
-			        		case "userlist":
-
+			        		case "next":
+								$(".bt_swap").html('Start');
+								$(".bt_next").addClass('button-disabled');
+			        			$("#userstory").text(message.story);
+			        			$(".card").attr("src","images/leer.png");
+			        			break;
 			        		default:
 			        			break;
 			        	}
@@ -99,10 +131,11 @@
 		    			message.act = 'again';
 						$(".bt_swap").html('Start');
 						$(".bt_next").addClass('button-disabled');
+			        	$(".card").attr("src","images/leer.png");
 						break;
 				}
 		    	console.log("Sending: " + JSON.stringify(message));
-				conn.publish('sessions/lobby', JSON.stringify(message));
+				conn.publish(sessionid, JSON.stringify(message));
 			});
 
 			$(".bt_next").click(function(){
@@ -112,7 +145,7 @@
 		    	message.user_id = id;
 		    	message.act = 'next';
 		    	console.log("Sending: " + JSON.stringify(message));
-				conn.publish('sessions/lobby', JSON.stringify(message));
+				conn.publish(sessionid, JSON.stringify(message));
 			});
 		}
 	</script>

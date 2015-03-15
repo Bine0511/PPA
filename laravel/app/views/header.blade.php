@@ -26,6 +26,5 @@
 	        </ul>
 	      </div>
 	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
 	</nav>
 @show

@@ -2,9 +2,10 @@
 @section("content")
 	<div class="row">
 		<div class="controlpanel col-md-12 col-sm-12 col-xs-12">
-			<div id="storybox" class="jumbotron">
-				<h3 id="userstory">Das ist eine tolle Userstory</h3>
+			<div id="storybox" class="jumbotron" data-toggle="modal" data-target="#descModal">
+				<h3 id="userstory"></h3>
 			</div>
+			<!-- Modal -->
 		</div>
 	</div>
 	<div class="row">
@@ -27,13 +28,18 @@
 		<div class="item item-disabled"><img src="images/coffee.png" alt="Card Coffee"></div>
 		<div class="item item-disabled"><img src="images/fragezeichen.png" alt="Card Fragezeichen"></div>
 	</div>
+	<div id="userbox" class="row">
+    </div>
+@stop
 
+@section("js")
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
 	<script src="js/autobahn.min.js"></script>
+	<script src="packages/owlcarousel/owl.carousel.js"></script>
 	<script type="text/javascript" charset="utf-8">
 		var id = '' + Math.floor((Math.random()*1000)+1);
-		var sessionid = 'sessions/lobby';
+		var sessionid = 'sessions/666';
 		window.onload = function(){
 			conn = new ab.Session(
 		    	'ws://localhost:8080',
@@ -54,17 +60,22 @@
 			        					$("#cardbox").addClass('cardbox-disabled');
 										$(".item").addClass('item-disabled');
 		    							$("#statusmessage").text("Warten auf Moderator...");
+										$("#cardbox").show();
+										$("#userbox").hide();
 			        					break;
 			        				case 1:
 										$("#cardbox").removeClass('cardbox-disabled');
 										$(".item").removeClass('item-disabled');
-										console.log("ena");
 				    					$("#statusmessage").text("Abstimmen!");
+										$("#cardbox").show();
+										$("#userbox").hide();
 			        					break;
 			        				case 2:
 			        					$("#cardbox").addClass('cardbox-disabled');
 										$(".item").addClass('item-disabled');
-				    					$("#statusmessage").text("Moderator hat die Kartenauswahl gesperrt");
+				    					$("#statusmessage").text("Moderator hat die Kartenauswahl gesperrt");	
+										$("#cardbox").show();
+										$("#userbox").hide();
 			        					break;
 			        				default:
 			        					break;;
@@ -75,17 +86,48 @@
 								$("#cardbox").removeClass('cardbox-disabled');
 								$(".item").removeClass('item-disabled');
 		    					$("#statusmessage").text("Abstimmen!");
+								$("#cardbox").show();
+								$("#userbox").hide();
 				        		break;
 				        	case "stop":
 								$("#cardbox").addClass('cardbox-disabled');
 								$(".item").addClass('item-disabled');
 		    					$("#statusmessage").text("Moderator hat die Kartenauswahl gesperrt");
+								$("#cardbox").hide();
+								$("#userbox").show();
 								break;
+							case "voteinfo":
+			        			userid = message.user_id;
+			        			value = message.val;
+			        			labelclass ="label-default";
+			        			text = userid;
+			        			if(userid == id){
+			        				labelclass = "label-danger";
+			        				text = "Ich";
+			        			}
+			        			$('#userbox').append("<div id='container_" + userid + "' class='boxcontainer col-md-2 col-sm-3 col-xs-6'> \
+			        								<div id='box_" + userid + "' class='box'> \
+    												<h3><span class='card label " + labelclass + "'>" + text + "</span></h3> \
+    												<img id='img_" + userid + "' class='card' src='images/" + value + ".png'/> \
+    												</div></div>");
+			        			break;
 				        	case "again":
 				        		$("#cardbox").addClass('cardbox-disabled');
 								$(".item").addClass('item-disabled');
 		    					$("#statusmessage").text("Warten auf Moderator...");
+								$("#cardbox").show();
+								$("#userbox").hide();
+								$("#userbox").empty();
 				        		break;
+				        	case "next":
+				        		$("#cardbox").addClass('cardbox-disabled');
+								$(".item").addClass('item-disabled');
+		    					$("#statusmessage").text("Warten auf Moderator...");
+								$("#cardbox").show();
+								$("#userbox").hide();
+								$("#userbox").empty();
+			        			$("#userstory").text(message.story);
+			        			break;
 			        		default:
 			        			break;
 		        		}
