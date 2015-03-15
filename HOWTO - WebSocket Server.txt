@@ -1,0 +1,3 @@
+So wird der WebSocket-Server gestartet:
+	-) Konsole im Laravel Ordner öffnen ("cd C:\\....\PPA\laravel")
+	-) folgendes Kommando ausführen: "php artisan latchet:listen"
