@@ -190,8 +190,13 @@ class FileController extends Controller
 				//vote des users zur userstory
 				$vote = DB::table('vote')->where('vote_user_ID','=',$user->user_ID)->where('vote_userstory_ID','=',$ustory->userstory_ID)->get();
 				foreach ($vote as $vote) {
-					$voteVal = $vote->value;
-					$voteValFormat = number_format($voteVal, 2, '.', '');
+					if($vote->value != 'coffee' && $vote->value != '?'){
+						$voteVal = (Double)$vote->value;
+						$voteValFormat = number_format($voteVal, 2, '.', '');
+					}else{
+						$voteValFormat = $vote->value;
+					}
+					
 					$html = $html.'<tr><td>'.$user->user_name.'</td><td class="rechts">'.$voteValFormat.'</td></tr>';
 				}
 				
@@ -255,7 +260,7 @@ class FileController extends Controller
 		$html = $html.'<table class="ustry"><thead class="headers"><tr><td>Berechnete Zeit gesamt</td></tr></thead><tr><td>'.$sessio->sum_calc_time.' min.</td></tr></table>';
 	}
 	
-		$html = $html.'<figure style="position:relative; left:10%; top:5%;"><img src="images/PPA_Logo-800-500.png"/></figure><figcaption style="position:relative; left:20%;">PlanningPokerApp - Larissa Reitler, Manuela Greifoner, Sabine Schimpf, Markus Zwettler</figcaption>';
+		$html = $html.'<figure style="page-break-before:always; position:relative; left:10%; top:5%;"><img src="images/PPA_Logo-800-500.png"/></figure><figcaption style="position:relative; left:20%;">PlanningPokerApp - Larissa Reitler, Manuela Greifoner, Sabine Schimpf, Markus Zwettler</figcaption>';
 		
 		$html = $html . '</body></html>';
 	return PDF::load($html, 'A4', 'landscape')->show();
