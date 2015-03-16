@@ -26,10 +26,11 @@ class FileController extends Controller
 			}
 			//durchschnitt berechnen
 			$avgUs = $sumvote/$count;
+			$avgUsFormat = number_format($avgUs, 2, '.', '');
 			$test = DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_ID', '=', $ustory->userstory_ID)->get();
 			
 			//eintragen des ergebnisses in der DB
-			DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_ID', '=', $ustory->userstory_ID)->update(array('userstory_average' => $avgUs));
+			DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_ID', '=', $ustory->userstory_ID)->update(array('userstory_average' => $avgUsFormat));
 			
 		}
 	}
@@ -49,9 +50,9 @@ class FileController extends Controller
 				}
 			} 
 				$avgTUs = $sumTvote/$Tcount;
-
+				$avgTUsFormat = number_format($avgTUs, 2, '.', '');
 			
-			DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_ID', '=', $ustory->userstory_ID)->update(array('userstory_time_average' => $avgTUs));
+			DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_ID', '=', $ustory->userstory_ID)->update(array('userstory_time_average' => $avgTUsFormat));
 	}
 }
 
@@ -62,7 +63,8 @@ class FileController extends Controller
 		foreach ($ustory as $ustory) {
 			$sum += $ustory->userstory_average;
 		}
-		DB::table('session')->where('session_ID','=',$sess)->update(array('avg_sum'=>$sum));
+		$sumFormat = number_format($sum, 2, '.', '');
+		DB::table('session')->where('session_ID','=',$sess)->update(array('avg_sum'=>$sumFormat));
 	}
 
 //Durchschnittswert der Votes der Base-Userstory
@@ -78,7 +80,8 @@ class FileController extends Controller
 				$baseCount += 1;
 			}
 		$baseAvg = $baseSum/$baseCount;
-		DB::table('session')->where('session_ID','=',$sessio->session_ID)->update(array('avg_sum_base'=>$baseAvg));
+		$baseAvgFormat = number_format($baseAvg, 2, '.', '');
+		DB::table('session')->where('session_ID','=',$sessio->session_ID)->update(array('avg_sum_base'=>$baseAvgFormat));
 		}
 		
 	}
@@ -88,7 +91,8 @@ class FileController extends Controller
 		$userstory = DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_time_average','>',0)->get();
 		foreach ($userstory as $userstory) {
 			$newEntry = $userstory->userstory_time_average/$userstory->userstory_average;
-			DB::table('userstory')->where('userstory_ID','=',$userstory->userstory_ID)->update(array('userstory_timeavg_div_avg'=>$newEntry));
+			$newEntryFormat = number_format($newEntry, 2, '.', '');
+			DB::table('userstory')->where('userstory_ID','=',$userstory->userstory_ID)->update(array('userstory_timeavg_div_avg'=>$newEntryFormat));
 		}
 	}
 
@@ -103,7 +107,8 @@ class FileController extends Controller
 			$TDAcount += 1;
 		}
 			$avgTDA = $sumTDA/$TDAcount;
-			DB::table('session')->where('session_ID', '=', $ustory->userstory_session_ID)->update(array('avg_time_div_avg' => $avgTDA));
+			$avgTDAFormat = number_format($avgTDA, 2, '.', '');
+			DB::table('session')->where('session_ID', '=', $ustory->userstory_session_ID)->update(array('avg_time_div_avg' => $avgTDAFormat));
 			
 		
 	}
@@ -118,7 +123,8 @@ class FileController extends Controller
 			foreach ($us as $us) {
 				//durchschnitts votes der userstory * Durchschnitt der Zeit pro SP
 				$calcTime = $us->userstory_average*$sessi->avg_time_div_avg;
-				DB::table('userstory')->where('userstory_ID','=',$us->userstory_ID)->update(array('calc_time' => $calcTime ));
+				$calcTimeFormat = number_format($calcTime, 2, '.', '');
+				DB::table('userstory')->where('userstory_ID','=',$us->userstory_ID)->update(array('calc_time' => $calcTimeFormat ));
 			}
 		}
 	}
@@ -132,7 +138,8 @@ class FileController extends Controller
 			foreach ($us as $us) {
 				$sum = $sum + $us->calc_time;
 			}
-			DB::table('session')->where('session_ID','=',$sessi->session_ID)->update(array('sum_calc_time' => $sum ));
+			$sumFormat = number_format($sum, 2, '.', '');
+			DB::table('session')->where('session_ID','=',$sessi->session_ID)->update(array('sum_calc_time' => $sumFormat ));
 		}
 	}
 	
@@ -148,7 +155,7 @@ class FileController extends Controller
 	$this->sumCalcTime($sess);
 
 //Vote Tabelle
-	$html = '<html><head><meta charset="utf-8"><style> tfoot{font-size: 20px; border-top: 2px #9b0000 solid; color:#9b0000;} thead{height: 90%;border-bottom: 2px #9b0000 solid} table{width:100%; text-align:center; margin-bottom: 20px;} .family{font-family:Helvetica;} .headers{font-weight:bold;color:#9b0000;font-size:28px;} h1{font-size: 50px;} h2{color:#9b0000; font-size:45px; page-break-before:always;} td{width:50%} .ustry{width:100%; border:2px #000 solid; text-align:center; font-size:23px;} .table{margin:auto;}</style></head><body class="family">';
+	$html = '<html><head><meta charset="utf-8"><style>.links{text-align:left;} .rechts{text-align:right;} tfoot{font-size: 24px; border-top: 2px #9b0000 solid; color:#9b0000;} thead{height: 90%;border-bottom: 2px #9b0000 solid} table{width:100%; text-align:center; margin-bottom: 20px;} .family{font-family:Helvetica;} .headers{font-weight:bold;color:#9b0000;font-size:28px;} h1{font-size: 50px;} h2{color:#9b0000; font-size:45px; page-break-before:always;} td{width:50%} .ustry{width:100%; border:2px #000 solid; text-align:center; font-size:23px;} .table{margin:auto;}</style></head><body class="family">';
 	$html = $html.'<h1>Zusammenfassung</h1>';
 	$sessio = DB::table('session')->where('session_ID','=',$sess)->get();
 	foreach ($sessio as $sessio) {
@@ -183,11 +190,13 @@ class FileController extends Controller
 				//vote des users zur userstory
 				$vote = DB::table('vote')->where('vote_user_ID','=',$user->user_ID)->where('vote_userstory_ID','=',$ustory->userstory_ID)->get();
 				foreach ($vote as $vote) {
-					$html = $html.'<tr><td>'.$user->user_name.'</td><td>'.$vote->value.'</td></tr>';
+					$voteVal = $vote->value;
+					$voteValFormat = number_format($voteVal, 2, '.', '');
+					$html = $html.'<tr><td>'.$user->user_name.'</td><td class="rechts">'.$voteValFormat.'</td></tr>';
 				}
 				
 			}
-			$html = $html.'<tfoot><tr><td>Durchschnitt</td><td>'.$ustory->userstory_average.'</td></tr></tfoot>';
+			$html = $html.'<tfoot><tr><td>Durchschnitt</td><td class="rechts">'.$ustory->userstory_average.'</td></tr></tfoot>';
 			$html = $html.'</table>';
 		}
 
@@ -205,11 +214,13 @@ class FileController extends Controller
 				//timevote des users zur userstory
 				$timevote = DB::table('timevote')->where('timevote_user_id','=',$user->user_ID)->where('timevote_userstory_id','=',$ustory->userstory_ID)->get();
 				foreach ($timevote as $timevote) {
-					$html = $html.'<tr><td>'.$user->user_name.'</td><td>'.$timevote->timevote_value.' min.</td></tr>';
+					$timevoteVal = $timevote->timevote_value;
+					$timevoteValFormat = number_format($timevoteVal, 2, '.', '');
+					$html = $html.'<tr><td>'.$user->user_name.'</td><td class="rechts">'.$timevoteValFormat.' min.</td></tr>';
 				}
 				
 			}
-			$html = $html.'<tfoot><tr><td>Durchschnitt</td><td>'.$ustory->userstory_time_average.' min.</td></tr></tfoot>';
+			$html = $html.'<tfoot><tr><td>Durchschnitt</td><td class="rechts">'.$ustory->userstory_time_average.' min.</td></tr></tfoot>';
 
 			$html = $html.'</table>';
 		}
@@ -235,17 +246,17 @@ class FileController extends Controller
 		$html = $html.'</table>';
 
 		$html = $html.'<table class="ustry">';
-		$html = $html.'<tr><td>Durchschnitts Basestorypoints</td><td>'.$sessio->avg_sum_base.'</td></tr>';
-		$html = $html.'<tr><td>Summe Durchschnitts Storypoints</td><td>'.$sessio->avg_sum.'</td></tr>';
-		$html = $html.'<tr><td>Zeit pro Storypoint</td><td>'.$sessio->avg_time_div_avg.' min.</td></tr>';
+		$html = $html.'<tr><td class="links">Durchschnitts Basestorypoints</td><td class>'.$sessio->avg_sum_base.'</td></tr>';
+		$html = $html.'<tr><td class="links">Summe Durchschnitts Storypoints</td><td>'.$sessio->avg_sum.'</td></tr>';
+		$html = $html.'<tr><td class="links">Zeit pro Storypoint</td><td>'.$sessio->avg_time_div_avg.' min.</td></tr>';
 		$html = $html.'</table>';
 
 
 		$html = $html.'<table class="ustry"><thead class="headers"><tr><td>Berechnete Zeit gesamt</td></tr></thead><tr><td>'.$sessio->sum_calc_time.' min.</td></tr></table>';
 	}
 	
-
-	
+		$html = $html.'<figure style="position:relative; left:10%; top:5%;"><img src="images/PPA_Logo-800-500.png"/></figure><figcaption style="position:relative; left:20%;">PlanningPokerApp - Larissa Reitler, Manuela Greifoner, Sabine Schimpf, Markus Zwettler</figcaption>';
+		
 		$html = $html . '</body></html>';
 	return PDF::load($html, 'A4', 'landscape')->show();
 }
