@@ -83,7 +83,7 @@ class FileController extends Controller
 		
 	}
 
-//Zeit Durchschnitt durch Vote Durchschnitt
+//Zeit Durchschnitt durch Vote Durchschnitt (Zeit pro SP für jede US)
 	public function timeDivAvg($sess){
 		$userstory = DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_time_average','>',0)->get();
 		foreach ($userstory as $userstory) {
@@ -92,7 +92,7 @@ class FileController extends Controller
 		}
 	}
 
-//Durchschnitt der timeDivAvg
+//Durchschnitt der timeDivAvg (Durchschnitt Zeit Pro SP)
 	public function avgTimeDivAvg($sess){
 			$sumTDA = 0;
 			$avgTDA = 0;
@@ -148,8 +148,8 @@ class FileController extends Controller
 	$this->sumCalcTime($sess);
 
 //Vote Tabelle
-	$html = '<html><head><meta charset="utf-8"><style>.family{font-family:Helvetica;} h1{font-size: 50px;} .table{margin:auto;}</style></head><body class="family">';
-	$html = $html.'<h1>Ergebnis</h1>';
+	$html = '<html><head><meta charset="utf-8"><style> tfoot{font-size: 20px; border-top: 2px #9b0000 solid; color:#9b0000;} thead{height: 90%;border-bottom: 2px #9b0000 solid} table{width:100%; text-align:center; margin-bottom: 20px;} .family{font-family:Helvetica;} .headers{font-weight:bold;color:#9b0000;font-size:28px;} h1{font-size: 50px;} h2{color:#9b0000; font-size:45px; page-break-before:always;} td{width:50%} .ustry{width:100%; border:2px #000 solid; text-align:center; font-size:23px;} .table{margin:auto;}</style></head><body class="family">';
+	$html = $html.'<h1>Zusammenfassung</h1>';
 	$sessio = DB::table('session')->where('session_ID','=',$sess)->get();
 	foreach ($sessio as $sessio) {
 	//Teilnehmer Tabelle
@@ -158,7 +158,7 @@ class FileController extends Controller
 		//moderator ausgeben
 		$moderator = DB::table('moderator')->where('moderator_ID','=',$sessio->session_moderator_ID)->get();
 		foreach ($moderator as $moderator) {
-			$html = $html.'<tr><td style="font-weight:bold;color:#9b0000;font-size:28px;">'.$moderator->moderator_name.'</td></tr>';
+			$html = $html.'<tr class="headers"><td>'.$moderator->moderator_name.'</td></tr>';
 		}
 
 		//alle user ausgeben
@@ -170,10 +170,11 @@ class FileController extends Controller
 		$html = $html.'</table>';
 
 	//Vote Tabellen
+		$html = $html.'<h2>Storypoints</h2>';
 		//Userstory Tabellen erstellen
 		$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sessio->session_ID)->get();
 		foreach ($ustory as $ustory) {
-			$html = $html.'<table><thead><tr><td>User</td><td>'.$ustory->$userstory_name.'</td></tr></thead>';
+			$html = $html.'<table class="ustry"><thead  class="headers"><tr><td>User</td><td>'.$ustory->userstory_name.'</td></tr></thead>';
 
 
 			//alle User
@@ -186,98 +187,65 @@ class FileController extends Controller
 				}
 				
 			}
+			$html = $html.'<tfoot><tr><td>Durchschnitt</td><td>'.$ustory->userstory_average.'</td></tr></tfoot>';
+			$html = $html.'</table>';
+		}
+
+	//Timevote Tabellen
+		$html = $html.'<h2>Timevotes</h2>';
+		//Userstory (nur mit timevotes) Tabellen erstellen
+		$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sessio->session_ID)->where('userstory_time_average','>',0)->get();
+		foreach ($ustory as $ustory) {
+			$html = $html.'<table class="ustry"><thead class="headers"><tr><td>User</td><td>'.$ustory->userstory_name.'</td></tr></thead>';
+
+
+			//alle User
+			$user = DB::table('user')->where('user_session_ID','=',$sessio->session_ID)->get();
+			foreach ($user as $user) {
+				//timevote des users zur userstory
+				$timevote = DB::table('timevote')->where('timevote_user_id','=',$user->user_ID)->where('timevote_userstory_id','=',$ustory->userstory_ID)->get();
+				foreach ($timevote as $timevote) {
+					$html = $html.'<tr><td>'.$user->user_name.'</td><td>'.$timevote->timevote_value.' min.</td></tr>';
+				}
+				
+			}
+			$html = $html.'<tfoot><tr><td>Durchschnitt</td><td>'.$ustory->userstory_time_average.' min.</td></tr></tfoot>';
 
 			$html = $html.'</table>';
 		}
+
+		//Berechnete Zeiten
+		$html = $html.'<h2>Berechnete Zeit</h2>';
+		//alle userstorys
+
+		$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sessio->session_ID)->get();
+		foreach ($ustory as $ustory) {
+			$html = $html.'<table class="ustry"><thead class="headers"><tr><td>'.$ustory->userstory_name.'</td></tr></thead>';
+			$html = $html.'<tr><td>'.$ustory->calc_time.' min.</td></tr></table>';
+		}
+
+		//Ergebnis Tabelle
+		$html = $html.'<h2>Ergebnis</h2>';
+		$html = $html.'<table class="ustry">';
+			$html = $html.'<thead class="headers"><tr><td>Basestory</td></tr></thead>';
+			$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sessio->session_ID)->where('userstory_ID','=',$sessio->session_basestory_id)->get();
+			foreach ($ustory as $ustory) {
+				$html = $html.'<tr><td>'.$ustory->userstory_name.'</td></tr>';
+			}
+		$html = $html.'</table>';
+
+		$html = $html.'<table class="ustry">';
+		$html = $html.'<tr><td>Durchschnitts Basestorypoints</td><td>'.$sessio->avg_sum_base.'</td></tr>';
+		$html = $html.'<tr><td>Summe Durchschnitts Storypoints</td><td>'.$sessio->avg_sum.'</td></tr>';
+		$html = $html.'<tr><td>Zeit pro Storypoint</td><td>'.$sessio->avg_time_div_avg.' min.</td></tr>';
+		$html = $html.'</table>';
+
+
+		$html = $html.'<table class="ustry"><thead class="headers"><tr><td>Berechnete Zeit gesamt</td></tr></thead><tr><td>'.$sessio->sum_calc_time.' min.</td></tr></table>';
 	}
 	
 
-	/*
-	$user = DB::table('user')->where('user_session_ID','=',$sess)->get();
-	$userstory = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
-
-
-	$html = $html.'<table style="text-align:right; border: 2px solid #000; width:100%;"><tr style="border-bottom: 3px solid #000"><td><b>Punkte Schätzung</b></td>';
-	foreach ($userstory as $userstory) {
-		$html = $html . '<td width="">'.$userstory->userstory_name.'</td>';
-	}
-	$html = $html. '</tr>';
 	
-	foreach ($user as $user)
-	{$html = $html . '<tr><td>' . $user->user_name . '</td>';
-
-		$use = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
-		foreach($use as $use){
-			$vote = DB::table('vote')->where('vote_user_ID','=',$user->user_ID)->where('vote_userstory_ID', '=', $use->userstory_ID)->get();
-		foreach ($vote as $vote) {
-			$html = $html.'<td>'.$vote->value.'</td>';
-		}
-		}
-		$html = $html . '</tr>';
-	}      
-	$html = $html . '<tr style="border-top:4px solid #000;"><td><b>Durchschnitt</b></td>';
-	$usersavg = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
-	foreach ($usersavg as $usersavg) {
-		$html = $html.'<td><b>'.$usersavg->userstory_average.'</b></td>';
-	}
-	$html = $html . '</tr></table><br>';
-
-//TimeVote Tabelle
-	$users = DB::table('user')->where('user_session_ID','=',$sess)->get();
-	$userstorys = DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_time_average','>',0)->get();
-	$html = $html . '<table style="text-align:right; border: 2px solid #000; width:100%;"><tr style="border-bottom: 3px solid #000"><td><b>Zeitschätzung</b></td>';
-	foreach ($userstorys as $userstorys) {
-		$html = $html . '<td width="">'.$userstorys->userstory_name.'</td>';
-	}
-	$html = $html. '</tr>';
-	
-	foreach ($users as $users)
-	{$html = $html . '<tr><td>' . $users->user_name . '</td>';
-		$use = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
-		foreach($use as $use){
-			$timevote = DB::table('timevote')->where('timevote_user_ID','=',$users->user_ID)->where('timevote_userstory_ID', '=', $use->userstory_ID)->get();
-		foreach ($timevote as $timevote) {
-			$html = $html.'<td>'.$timevote->timevote_value.'</td>';
-		}
-		}
-		$html = $html . '</tr>';
-	}      
-	$html = $html . '<tr style="border-top:4px solid #000;"><td><b>Durchschnitt</b></td>';
-	$usersavg = DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_time_average','>',0)->get();
-	foreach ($usersavg as $usersavg) {
-		$html = $html.'<td><b>'.$usersavg->userstory_time_average.'</b></td>';
-	}
-	
-	$html = $html . '</tr></table><br>';
-
-
-
-	//Avg Time Table
-	$userstory = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
-	$html = $html.'<table style="text-align:right; border: 2px solid #000; width:100%;"><tr style="border-bottom: 3px solid #000"><td><b>Zeit berechnet</b></td>';
-	foreach ($userstory as $userstory) {
-		$html = $html . '<td width="">'.$userstory->userstory_name.'</td>';
-	}
-	$html = $html. '</tr><tr>';
-	$avgs = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
-		$html = $html . '<td>Zeit (min)</td>';
-	foreach ($avgs as $avgs) {
-		$html = $html . '<td>'.$avgs->calc_time.'</td>';
-	}
-	$html = $html . '</tr></table><br>';
-
-//Sum & Rechnungs Tabelle
-   $html = $html . '<table style="text-align:right; border: 2px solid #000; width:25%;"><tr>';
-	$sess = DB::table('session')->where('session_ID','=',$sess)->get();
-	foreach ($sess as $sess) {
-		
-		$html = $html.'<td>Avg Timeavg/PointAvg</td>';
-		$html = $html.'<td><b>'.$sess->avg_time_div_avg.'</b></td></tr>';
-		$html = $html.'<tr><td>Zeit Gesamt</td>';
-		$html = $html.'<td><b>'.$sess->sum_calc_time.'</b></td></tr>';
-	}
-	$html = $html . '</table><br>';
-*/
 		$html = $html . '</body></html>';
 	return PDF::load($html, 'A4', 'landscape')->show();
 }
