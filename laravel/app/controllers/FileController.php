@@ -138,6 +138,7 @@ class FileController extends Controller
 			foreach ($us as $us) {
 				$sum = $sum + $us->calc_time;
 			}
+			$sum = $sum/2;
 			$sumFormat = number_format($sum, 2, '.', '');
 			DB::table('session')->where('session_ID','=',$sessi->session_ID)->update(array('sum_calc_time' => $sumFormat ));
 		}
