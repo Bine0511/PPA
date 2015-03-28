@@ -28,6 +28,14 @@
 		<div class="item item-disabled"><img src="images/coffee.png" alt="Card Coffee"></div>
 		<div class="item item-disabled"><img src="images/fragezeichen.png" alt="Card Fragezeichen"></div>
 	</div>
+	<div id="timebox" class="row">
+		<div class="controlpanel col-md-12 col-sm-12 col-xs-12">
+			<h2>Bitte in Stunden sch&auml;tzen!</h2>
+		</div>
+		<div class="controlpanel col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-6">
+			{{ Form::text('description', null, array('id' => 'timeinput', 'class' => 'form-control signin-input')) }}
+		</div>
+	</div>
 	<div id="userbox" class="row">
     </div>
 @stop
@@ -38,13 +46,18 @@
 	<script src="js/autobahn.min.js"></script>
 	<script src="packages/owlcarousel/owl.carousel.js"></script>
 	<script type="text/javascript" charset="utf-8">
-		var id = '' + Math.floor((Math.random()*1000)+1);
-		var sessionid = 'sessions/666';
+		@if (Auth::User()->check())
+	        var name = "{{ Auth::User()->get()->user_name }}";
+	        var id = "{{ Auth::User()->get()->user_ID }}";
+	        var sessionid = {{ Auth::User()->get()->user_session_ID }};
+	    @endif
+		var sessionstring = 'sessions/' + sessionid;
+		$("#timebox").hide();
 		window.onload = function(){
 			conn = new ab.Session(
-		    	'ws://localhost:8080',
+		    	'ws://10.14.15.10:8080',
 			    function() { // Once the connection has been established
-			        conn.subscribe(sessionid, function(topic, msg) {
+			        conn.subscribe(sessionstring, function(topic, msg) {
 			        	var message;
 			        	if(msg.topic){
 			        		message = msg;
@@ -97,11 +110,12 @@
 								$("#userbox").show();
 								break;
 							case "voteinfo":
-			        			userid = message.user_id;
-			        			value = message.val;
-			        			labelclass ="label-default";
-			        			text = userid;
-			        			if(userid == id){
+			        			var userid = message.user_id;
+			        			var username = message.user_name;
+			        			var value = message.val;
+			        			var labelclass ="label-default";
+			        			var text = username;
+			        			if(username == name){
 			        				labelclass = "label-danger";
 			        				text = "Ich";
 			        			}
@@ -112,6 +126,7 @@
     												</div></div>");
 			        			break;
 				        	case "again":
+								$('.selected').removeClass('selected');
 				        		$("#cardbox").addClass('cardbox-disabled');
 								$(".item").addClass('item-disabled');
 		    					$("#statusmessage").text("Warten auf Moderator...");
@@ -120,6 +135,7 @@
 								$("#userbox").empty();
 				        		break;
 				        	case "next":
+								$('.selected').removeClass('selected');
 				        		$("#cardbox").addClass('cardbox-disabled');
 								$(".item").addClass('item-disabled');
 		    					$("#statusmessage").text("Warten auf Moderator...");
@@ -134,16 +150,18 @@
 			        });
 			        var message = {};
 			        message.user_id = id;
+			        message.user_name = name;
 			        message.act = 'join';
 		    		console.log("Sending: " + JSON.stringify(message));
-			        conn.publish(sessionid, JSON.stringify(message));
+			        conn.publish(sessionstring, JSON.stringify(message));
 			    },
 			    function() {
 			        var message = {};
 			        message.user_id = id;
+			        message.user_name = name;
 			        message.act = 'leave';
 		    		console.log("Sending: " + JSON.stringify(message));
-			        conn.publish(sessionid, JSON.stringify(message));
+			        conn.publish(sessionstring, JSON.stringify(message));
 			    },
 			    {
 			        // Additional parameters, we're ignoring the WAMP sub-protocol for older browsers
@@ -174,11 +192,12 @@
 				$('.selected').removeClass('selected'); // removes the previous selected class
 				$(this).addClass('selected'); // adds the class to the clicked image
 		    	var message = {};
-		    	message.user_id = id;
+			    message.user_id = id;
+		    	message.user_name = name;
 		    	message.act = 'pick';
 		    	message.val = $(this).children("img").attr('src');
 		    	console.log("Sending: " + JSON.stringify(message));
-				conn.publish(sessionid, JSON.stringify(message));
+				conn.publish(sessionstring, JSON.stringify(message));
 			});
 		}
 	</script>

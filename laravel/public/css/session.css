@@ -10,3 +10,11 @@
 	height:112px;
 	background-size: contain;
 }
+
+#timebox{
+	display:none;
+}
+
+#pop{
+	z-index: inherit !important;
+}

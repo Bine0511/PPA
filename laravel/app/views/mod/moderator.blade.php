@@ -1,6 +1,6 @@
 @extends("layout")
 @section("content")
-	<div class="row">
+	<div id="head" class="row">
 		<div class="controlpanel col-md-12 col-sm-12 col-xs-12">
 			<div id="storybox" class="jumbotron">
 				<h3 id="userstory"></h3>
@@ -17,6 +17,19 @@
 	</div>
 	<div id="userbox" class="row">
     </div>
+
+    <div id="timebox" class="row">
+		<div class="controlpanel col-md-6 col-md-offset-3 col-sm-8 col-sm-offset-2 col-xs-12">
+	    	<h2>W&auml;hlen Sie die 3 Storys f&uuml;r die Zeitsch&auml;tzung!</h2>
+	    	<select id="SEL_1" class="sel form-control">
+	    	</select>
+	    	<select id="SEL_2" class="sel form-control">
+	    	</select>
+	    	<select id="SEL_3" class="sel form-control">
+	    	</select>
+	    	{{ Form::button('Los!', array('class' => 'btn btn-lg btn-danger btn-block', 'id' => 'bt_time')) }}
+    	</div>
+    </div>
 @stop
 
 @section("js")
@@ -24,13 +37,20 @@
 	<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
 	<script src="js/autobahn.min.js"></script>
 	<script type="text/javascript" charset="utf-8">
-		var id = Math.floor((Math.random()*1000)+1);
-		var sessionid = 'sessions/666';
+		@if (Auth::Mod()->check())
+	        @if(Auth::PPSession()->check())
+	        var id = "{{ Auth::Mod()->get()->moderator_ID }}";
+	        var sessionid = {{ Auth::PPSession()->get()->session_ID }};
+	        @endif
+	    @endif
+		var sessionstring = 'sessions/' + sessionid;
+		var mode = "norm";
+		$("#timebox").hide();
 		window.onload = function(){
 			conn = new ab.Session(
 		    	'ws://localhost:8080',
 			    function() { // Once the connection has been established
-			        conn.subscribe(sessionid, function(topic, msg) {
+			        conn.subscribe(sessionstring, function(topic, msg) {
 			        	var message;
 			        	if(msg.topic){
 			        		message = msg;
@@ -42,6 +62,7 @@
 
 			        	switch(message.act){
 			        		case "joininfo":
+			        			mode = message.mode;
 								$(".bt_swap").removeClass('button-disabled');
 			        			switch (message.status){
 			        				case 0:
@@ -56,6 +77,17 @@
 										$(".bt_swap").html('Wiederholen');
 										$(".bt_next").removeClass('button-disabled');
 			        					break;
+			        				case 3:
+			        					$("#head").hide();
+					        			$("#userbox").hide();
+					        			$("#timebox").show();
+					        			var stories = message.stories;
+					        			var key;
+										for (key in stories) {
+											$('#SEL_1').append("<option id='opt_" + stories[key].userstory_ID + "'>" + stories[key].userstory_name + "</option>");
+											$('#SEL_2').append("<option id='opt_" + stories[key].userstory_ID + "'>" + stories[key].userstory_name + "</option>");
+											$('#SEL_3').append("<option id='opt_" + stories[key].userstory_ID + "'>" + stories[key].userstory_name + "</option>");
+										}
 			        				default:
 			        					break;;
 			        			}
@@ -63,17 +95,21 @@
 			        			break;
 			        		case "join":
 			        			userid=message.user_id;
+			        			username=message.user_name;
+			        			$('#container_' + userid).remove();
 			        			$('#userbox').append("<div id='container_" + userid + "' class='boxcontainer col-md-2 col-sm-3 col-xs-6'> \
 			        								<div id='box_" + userid + "' class='box'> \
-    												<h3><span class='card label label-default'>User" + userid + "</span></h3> \
+    												<h3><span class='card label label-default'>" + username + "</span></h3> \
     												<img id='img_" + userid + "' class='card' src='images/leer.png'/> \
     												</div></div>");
 			        			break;
 			        		case "prejoin":
 			        			userid=message.user_id;
+			        			username=message.user_name;
+			        			$('#container_' + userid).remove();
 			        			$('#userbox').append("<div id='container_" + userid + "' class='boxcontainer col-md-2 col-sm-3 col-xs-6'> \
 			        								<div id='box_" + userid + "' class='box'> \
-    												<h3><span class='card label label-default'>User" + userid + "</span></h3> \
+    												<h3><span class='card label label-default'>" + username + "</span></h3> \
     												<img id='img_" + userid + "' class='card' src='images/leer.png'/> \
     												</div></div>");
 			        			break;
@@ -92,6 +128,18 @@
 			        			$("#userstory").text(message.story);
 			        			$(".card").attr("src","images/leer.png");
 			        			break;
+			        		case "time":
+			        			$("#head").hide();
+			        			$("#userbox").hide();
+			        			$("#timebox").show();
+			        			var stories = message.stories;
+			        			var key;
+								for (key in stories) {
+									$('#SEL_1').append("<option id='opt_" + stories[key].userstory_ID + "'>" + stories[key].userstory_name + "</option>");
+									$('#SEL_2').append("<option id='opt_" + stories[key].userstory_ID + "'>" + stories[key].userstory_name + "</option>");
+									$('#SEL_3').append("<option id='opt_" + stories[key].userstory_ID + "'>" + stories[key].userstory_name + "</option>");
+								}
+			        			break;
 			        		default:
 			        			break;
 			        	}
@@ -100,7 +148,7 @@
 			        message.user_id = id;
 			        message.act = 'modjoin';
 		    		console.log("Sending: " + JSON.stringify(message));
-			        conn.publish(sessionid, JSON.stringify(message));
+			        conn.publish(sessionstring, JSON.stringify(message));
 			    },
 			    function() {
 			        // When the connection is closed
@@ -118,7 +166,11 @@
 		    	message.user_id = id;
 				switch(bt_text){
 					case "Start":
-		    			message.act = 'start';
+						if(mode == 'time'){
+
+						}else{
+		    				message.act = 'start';
+						}
 						$(".bt_swap").html('Stop');
 						$(".bt_next").addClass('button-disabled');
 						break;
@@ -135,7 +187,7 @@
 						break;
 				}
 		    	console.log("Sending: " + JSON.stringify(message));
-				conn.publish(sessionid, JSON.stringify(message));
+				conn.publish(sessionstring, JSON.stringify(message));
 			});
 
 			$(".bt_next").click(function(){
@@ -145,7 +197,42 @@
 		    	message.user_id = id;
 		    	message.act = 'next';
 		    	console.log("Sending: " + JSON.stringify(message));
-				conn.publish(sessionid, JSON.stringify(message));
+				conn.publish(sessionstring, JSON.stringify(message));
+			});
+
+			$("#bt_time").click(function(){
+		        var message = {};
+		        message.user_id = id;
+		        message.act = 'timechosen';
+		        message.storyid = $( "#SEL_1 option:selected" ).attr('id').split('_')[1];
+	    		console.log("Sending: " + JSON.stringify(message));
+		        conn.publish(sessionstring, JSON.stringify(message));
+
+
+		        var message = {};
+		        message.user_id = id;
+		        message.act = 'timechosen';
+		        message.storyid = $( "#SEL_2 option:selected" ).attr('id').split('_')[1];
+	    		console.log("Sending: " + JSON.stringify(message));
+		        conn.publish(sessionstring, JSON.stringify(message));
+
+
+		        var message = {};
+		        message.user_id = id;
+		        message.act = 'timechosen';
+		        message.storyid = $( "#SEL_3 option:selected" ).attr('id').split('_')[1];
+	    		console.log("Sending: " + JSON.stringify(message));
+		        conn.publish(sessionstring, JSON.stringify(message));
+
+		        var message = {};
+		        message.user_id = id;
+		        message.act = 'timefwd';
+	    		console.log("Sending: " + JSON.stringify(message));
+		        conn.publish(sessionstring, JSON.stringify(message));
+
+		        $("#head").show();
+			    $("#userbox").show();
+			    $("#timebox").hide();
 			});
 		}
 	</script>

@@ -23,7 +23,7 @@ class ModController extends Controller
 
 
     public function getRegister() {
-        return View::make("mod.register");
+        return View::make("mod/register");
     }
 
     public function postRegister(){
@@ -35,10 +35,10 @@ class ModController extends Controller
 
         $newMod = Mod::create($mod);
         if($newMod){
-            return Redirect::route('mod/login');
+            Auth::Mod()->login($newMod);
+            return Redirect::route('index');
         }
-
-        return Redirect::to('register')->withInput()->withErrors($validation);
+        return Redirect::to('register')->withInput();
     }
 
     public function logout() {

@@ -20,7 +20,8 @@ class PPSession extends Eloquent implements UserInterface{
     protected $primaryKey = "session_ID";
     public static $rules = array(
         'session_name' => 'required',
-        'session_pw' => 'required'
+        'session_pw' => 'required',
+        'session_moderator_ID' => 'required'
     ); 
 
 	/**

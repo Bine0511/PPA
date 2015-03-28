@@ -10,15 +10,15 @@
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
 
 <!-- Custom CSS -->
-<link href="css/index.css" rel="stylesheet">
-<link rel="shortcut icon" href="images/PPA_Logo-800-500.png" type="image/x-icon" />
+{{ HTML::style('css/index.css'); }}
+<link rel="shortcut icon" href="{{ asset('images/PPA_Logo-800-500.png') }}">
 
 
 <title>Planning Poker App</title>
 
 <!--Carousel-->
-<link rel="stylesheet" href="packages/owlcarousel/assets/owl.carousel.css">
-<link rel="stylesheet" href="packages/owlcarousel/assets/owl.theme.default.css">
+{{ HTML::style('packages/owlcarousel/assets/owl.carousel.css'); }}
+{{ HTML::style('packages/owlcarousel/assets/owl.theme.default.css'); }}
 
 <style type="text/css">
    .dock img { behavior: url(iepngfix.htc) }
@@ -26,7 +26,7 @@
 </head>
 <body>
 	<div class="modal fade" id="descModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-	 	<div class="modal-dialog">
+	 	<div id="pop" class="modal-dialog">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
 	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -48,7 +48,7 @@
 	@include("footer")
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-	<script src="packages/owlcarousel/owl.carousel.js"></script>
+	{{ HTML::script('packages/owlcarousel/owl.carousel.js'); }}
 	@yield("js")
 </body>
 </html>

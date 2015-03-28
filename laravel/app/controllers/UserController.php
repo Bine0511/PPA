@@ -2,53 +2,30 @@
 
 class UserController extends Controller
 {
-	public function getLogin() {
-		return View::make("user.login");
-	}
 
-	public function postLogin(){
+	public function joinSession(){
+		$session_ID = DB::select("select session_ID from session where session_name = '".Input::get('session')."'")[0]->session_ID;
 		$user = array(
-            'username' => Input::get('username'),
-            'password' => Input::get('password')
+            'user_name' => Input::get('name'),
+            'user_session_ID' => $session_ID,
+            'user_session_pw' => Input::get('pwd')
         );
-        
-        if (Auth::attempt($user)) {
-            return Redirect::route('index');
+        $newUser = User::create($user);
+        if($newUser){
+            Auth::User()->login($newUser);
+            return Redirect::route('user/user');
         }
-        
-        return Redirect::route('user/login')
-            ->withInput();
 	}
 
-
-	public function getRegister() {
-		return View::make("user.register");
+	public function getjoinSession(){
+        return View::make('user/join');
 	}
 
-	public function postRegister(){
-		$rules = array(
-			'username' => array('required', 'min:3'),
-			'password' => array('required', 'min:5')
-		);
-		
-		$messages = array(
-			'password.required' => 'Password is required.',
-			'password.min' => 'Your password is too short! Min. 5 symbols.',
-			'username.required' => 'Username is required.',
-			'username.min' => 'Your username is too short! Min. 3 letters.',
-			'username.unique' => 'This username has already been taken.'
-		);
-
-		$validation = Validator::make(Input::all(), $rules, $messages);
-		if ($validation->fails()) {
-			return Redirect::to('register')->withInput()->withErrors($validation);	
-		}
-
-		$test = DB::insert('insert into user (username, password) values("'.Input::get('username').'", "'.Hash::make(Input::get('password')).'")');
-	}
-
-	public function logout() {
-		Auth::logout();
-		return Redirect::route("user/login");
-	}
+    public function showEnd(){
+        return View::make('user/end');
+    }
+    public function logout() {
+        Auth::User()->logout();
+        return View::make("index");
+    }
 }

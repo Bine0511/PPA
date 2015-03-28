@@ -4,7 +4,7 @@ use Illuminate\Auth\UserInterface;
 use Illuminate\Auth\Reminders\RemindableInterface;
 
 class Mod extends Eloquent implements UserInterface, RemindableInterface {
-	protected $fillable = ['moderator_ID','moderator_name','moderator_pw, remember_token'];
+	protected $fillable = ['moderator_ID','moderator_name','moderator_pw', 'remember_token'];
 	
 	public $timestamps = false;
 	/**
