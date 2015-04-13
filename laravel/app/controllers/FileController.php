@@ -224,11 +224,11 @@ class FileController extends Controller
 				foreach ($timevote as $timevote) {
 					$timevoteVal = (Double)$timevote->timevote_value;
 					$timevoteValFormat = number_format($timevoteVal, 2, '.', '');
-					$html = $html.'<tr><td>'.$user->user_name.'</td><td class="rechts">'.$timevoteValFormat.' min.</td></tr>';
+					$html = $html.'<tr><td>'.$user->user_name.'</td><td class="rechts">'.$timevoteValFormat.' h</td></tr>';
 				}
 				
 			}
-			$html = $html.'<tfoot><tr><td>Durchschnitt</td><td class="rechts">'.$ustory->userstory_time_average.' min.</td></tr></tfoot>';
+			$html = $html.'<tfoot><tr><td>Durchschnitt</td><td class="rechts">'.$ustory->userstory_time_average.' h</td></tr></tfoot>';
 
 			$html = $html.'</table>';
 		}
@@ -240,7 +240,7 @@ class FileController extends Controller
 		$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sessio->session_ID)->get();
 		foreach ($ustory as $ustory) {
 			$html = $html.'<table class="ustry"><thead class="headers"><tr><td>'.$ustory->userstory_name.'</td></tr></thead>';
-			$html = $html.'<tr><td>'.$ustory->calc_time.' min.</td></tr></table>';
+			$html = $html.'<tr><td>'.$ustory->calc_time.' h</td></tr></table>';
 		}
 
 		//Ergebnis Tabelle
@@ -256,11 +256,11 @@ class FileController extends Controller
 		$html = $html.'<table class="ustry">';
 		$html = $html.'<tr><td class="links">Durchschnitts Basestorypoints</td><td class>'.$sessio->avg_sum_base.'</td></tr>';
 		$html = $html.'<tr><td class="links">Summe Durchschnitts Storypoints</td><td>'.$sessio->avg_sum.'</td></tr>';
-		$html = $html.'<tr><td class="links">Zeit pro Storypoint</td><td>'.$sessio->avg_time_div_avg.' min.</td></tr>';
+		$html = $html.'<tr><td class="links">Zeit pro Storypoint</td><td>'.$sessio->avg_time_div_avg.' h</td></tr>';
 		$html = $html.'</table>';
 
 
-		$html = $html.'<table class="ustry"><thead class="headers"><tr><td>Berechnete Zeit gesamt</td></tr></thead><tr><td>'.$sessio->sum_calc_time.' min.</td></tr></table>';
+		$html = $html.'<table class="ustry"><thead class="headers"><tr><td>Berechnete Zeit gesamt</td></tr></thead><tr><td>'.$sessio->sum_calc_time.' h</td></tr></table>';
 	}
 	
 		$html = $html.'<figure style="page-break-before:always; position:relative; left:10%; top:5%;"><img src="images/PPA_Logo-800-500.png"/></figure><figcaption style="position:relative; left:20%;">PlanningPokerApp - Larissa Reitler, Manuela Greifoner, Sabine Schimpf, Markus Zwettler</figcaption>';

@@ -305,6 +305,14 @@ class SessionRoom extends BaseTopic {
 				'stories' => $this->session_userstories[$room]
 			);
 			$this->broadcast($topic, json_encode($msg), $exclude = array(), $eligible = array($connection->WAMP->sessionId));
+			//Für Basestory 1 eintragen
+			$booltmp= array_key_exists($room, $this->session_user);
+			if($booltmp!== false){
+				$keys = array_keys($this->session_user[$room]);
+				foreach($keys as $user) {
+					DB::insert("insert into vote values ('".$user."', '".$this->session_vars[$room]['base-id']."', '".$room."', '1')");
+				}
+			}
 		}else{
 			$msg = array(
 				'user_id' => 'SERVER',

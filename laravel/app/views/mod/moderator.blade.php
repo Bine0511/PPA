@@ -172,7 +172,7 @@
 			        			$("#userstory").text(message.story);
 			        			$("#storyheader").text(message.story);
 			        			$("#storydesc").text(message.desc);
-			        			$(".timecard").val('');
+			        			$(".timecard").text('');
 			        			break;
 
 			        		case "ende":
