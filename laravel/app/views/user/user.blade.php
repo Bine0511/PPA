@@ -55,7 +55,7 @@
 		$("#timebox").hide();
 		window.onload = function(){
 			conn = new ab.Session(
-		    	'ws://10.0.0.10:8080',
+		    	'ws://10.3.59.11:8080',
 			    function() { // Once the connection has been established
 			        conn.subscribe(sessionstring, function(topic, msg) {
 			        	var message;
