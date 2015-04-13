@@ -25,18 +25,35 @@
   </style>
 </head>
 <body>
-	<div class="modal fade" id="descModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal fade" id="storymodal" tabindex="-1" role="dialog" aria-labelledby="storyheader" aria-hidden="true">
 	 	<div id="pop" class="modal-dialog">
 	    	<div class="modal-content">
 	      		<div class="modal-header">
 	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-	        		<h4 class="modal-title" id="myModalLabel">Userstory Beschreibung</h4>
+	        		<h4 class="modal-title" id="storyheader"></h4>
 	      		</div>
 	      		<div class="modal-body">
-	        	<span id="us_desc">Beschreibung</span>
+	        		<span id="storydesc"></span>
 	      		</div>
 	      		<div class="modal-footer">
 	        	<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+	      		</div>
+	    	</div>
+	  	</div>
+	</div>
+	<!-- Modal -->
+	<div class="modal fade" id="basemodal" tabindex="-1" role="dialog" aria-labelledby="baselabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+	    		<div class="modal-header">
+	        		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+	        		<h4 class="modal-title" id="baselabel"></h4>
+	     		</div>
+	      		<div class="modal-body">
+	        		<span id="basedesc"></span>
+	      		</div>
+	      		<div class="modal-footer">
+	        		<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
 	      		</div>
 	    	</div>
 	  	</div>

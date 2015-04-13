@@ -92,6 +92,8 @@
 			        					break;;
 			        			}
 			        			$("#userstory").text(message.story);
+			        			$("#storyheader").text(message.story);
+			        			$("#storydesc").text(message.desc);
 			        			break;
 			        		case "join":
 			        			userid=message.user_id;
@@ -147,6 +149,8 @@
 								$(".bt_swap").html('Start');
 								$(".bt_next").addClass('button-disabled');
 			        			$("#userstory").text(message.story);
+			        			$("#storyheader").text(message.story);
+			        			$("#storydesc").text(message.desc);
 			        			$(".card").attr("src","images/leer.png");
 			        			break;
 			        		case "time":
@@ -166,6 +170,8 @@
 			        			$(".bt_swap").html('Start');
 								$(".bt_next").addClass('button-disabled');
 			        			$("#userstory").text(message.story);
+			        			$("#storyheader").text(message.story);
+			        			$("#storydesc").text(message.desc);
 			        			$(".timecard").val('');
 			        			break;
 

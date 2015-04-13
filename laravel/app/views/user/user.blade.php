@@ -2,10 +2,15 @@
 @section("content")
 	<div class="row">
 		<div class="controlpanel col-md-12 col-sm-12 col-xs-12">
-			<div id="storybox" class="jumbotron" data-toggle="modal" data-target="#descModal">
+			<div id="storybox" class="jumbotron" data-toggle="modal" data-target="#storymodal">
 				<h3 id="userstory"></h3>
 			</div>
 			<!-- Modal -->
+		</div>
+	</div>
+	<div id="basebox" class="row">
+		<div class="basepanel col-md-4 col-md-offset-4 col-sm-4 col-sm-offset-4 col-xs-12">
+			{{ Form::button('Basisstory anzeigen', array('class' => 'btn btn-lg btn-default btn-block bt_swap bt_start', 'data-toggle' => 'modal', 'data-target' => '#basemodal')); }}
 		</div>
 	</div>
 	<div class="row">
@@ -69,9 +74,11 @@
 			        	switch(message.act){
 			        		case "joininfo":
 			        			if(message.mode=="norm"){
+			        				$("#baselabel").text(message.basestory);
+			        				$("#basedesc").text(message.basedesc);
 				        			switch (message.status){
 				        				case 0:
-				        					$("#cardbox").addClass('cardbox-disabled');
+				         					$("#cardbox").addClass('cardbox-disabled');
 											$(".item").addClass('item-disabled');
 			    							$("#statusmessage").text("Warten auf Moderator...");
 											$("#cardbox").show();
@@ -96,6 +103,7 @@
 				        			}
 				        		}
 				        		if(message.mode == "time"){
+				        			$("#basebox").hide();
 				        			switch (message.status){
 				        				case 0:
 											$("#cardbox").hide();
@@ -123,6 +131,8 @@
 				        			}
 				        		}
 			        			$("#userstory").text(message.story);
+			        			$("#storyheader").text(message.story);
+			        			$("#storydesc").text(message.desc);
 			        			break;
 			    			case "start":
 								$("#cardbox").removeClass('cardbox-disabled');
@@ -207,14 +217,19 @@
 								$("#userbox").hide();
 								$("#userbox").empty();
 			        			$("#userstory").text(message.story);
+			        			$("#storyheader").text(message.story);
+			        			$("#storydesc").text(message.desc);
 			        			break;
 			        		case "timenext":
+				        		$("#basebox").hide();
 		    					$("#statusmessage").text("Warten auf Moderator...");
 								$("#timeinput").prop('disabled', true);
 								$("#userbox").hide();
 								$("#timebox").hide();
 								$("#userbox").empty();
 			        			$("#userstory").text(message.story);
+			        			$("#storyheader").text(message.story);
+			        			$("#storydesc").text(message.desc);
 			        			break;
 			        		case "ende":
 			        			window.location="{{URL::to('end')}}";

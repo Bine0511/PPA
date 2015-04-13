@@ -44,11 +44,12 @@ class SessionRoom extends BaseTopic {
 			$this->session_vars[$room]['mode'] = "norm";
 			$basetemp = DB::select('select session_basestory_ID from session where session_ID = "'.$connection->PPA->room.'"');
 			$this->session_vars[$room]['base-id'] = $basetemp[0]->session_basestory_ID;
-        	$this->session_userstories[$room] = DB::select('select userstory_ID, userstory_name, userstory_description from userstory where userstory_session_ID = "'.$connection->PPA->room.'"AND userstory_ID<>"'.$this->session_vars[$room]['base-id'].'"');
+        	$this->session_userstories[$room] = DB::select('select userstory_ID, userstory_name, userstory_description from userstory where userstory_session_ID = "'.$connection->PPA->room.'" AND userstory_ID<>"'.$this->session_vars[$room]['base-id'].'"');
 			$this->session_vars[$room]['storyid'] = 0;
 			$this->session_vars[$room]['max-storyid'] = count($this->session_userstories[$room]);
-			$this->session_vars[$room]['base-title'] = 0;
-			$this->session_vars[$room]['base-desc'] = 0;
+			$basestorytemp = DB::select('select userstory_name, userstory_description from userstory where userstory_session_ID = "'.$connection->PPA->room.'" AND userstory_ID = "'.$this->session_vars[$room]['base-id'].'"');
+			$this->session_vars[$room]['base-title'] = $basestorytemp[0]->userstory_name;
+			$this->session_vars[$room]['base-desc'] = $basestorytemp[0]->userstory_description;
 			$this->session_vars[$room]['timefirst'] = 0; // 0 = first, 1 = not
 		}
 		switch($json->act){
@@ -234,7 +235,9 @@ class SessionRoom extends BaseTopic {
 						'mode' => $this->session_vars[$room]['mode'],
 						'status' => $this->session_vars[$room]['status'],
 						'story' => $this->session_userstories[$room][$this->session_vars[$room]['storyid']]->userstory_name,
-						'desc' => $this->session_userstories[$room][$this->session_vars[$room]['storyid']]->userstory_description
+						'desc' => $this->session_userstories[$room][$this->session_vars[$room]['storyid']]->userstory_description,
+						'basestory' => $this->session_vars[$room]['base-title'],
+						'basedesc' => $this->session_vars[$room]['base-desc']
 					);
 					$this->broadcast($topic, json_encode($msg), $exclude = array(), $eligible = array($connection->WAMP->sessionId));
 					break;
