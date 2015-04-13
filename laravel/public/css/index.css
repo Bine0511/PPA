@@ -8,6 +8,10 @@ body {
 	margin-top: 125px;
 }
 
+.modal-dialog{
+	z-index: inherit !important;
+}
+
 html {
     width: 100%;
 }
