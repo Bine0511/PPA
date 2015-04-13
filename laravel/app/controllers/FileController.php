@@ -20,6 +20,7 @@ class FileController extends Controller
 			foreach ($vote as $vote) {
 				if($vote->value != '?' && $vote->value != 'coffee'){
 				//summe und anzahl der votes die nicht '?' oder 'coffee' sind
+
 				$sumvote = $sumvote + $vote->value;
 				$count += 1;
 			}
@@ -37,22 +38,23 @@ class FileController extends Controller
 
 //Durchschnitt der Time votes pro Userstory berechnen, s.o.
 	public function calcTimeAvg($sess){
-		$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
-		foreach ($ustory as $ustory) {
+			$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sess)->get();
+			foreach ($ustory as $ustory) {
+
 			$sumTvote = 0;
-			$avgTUs = 0;
-			$Tcount = 0;
-			$timevote = DB::table('timevote')->where('timevote_userstory_ID', '=', $ustory->userstory_ID)->where('timevote_session_ID','=',$sess)->whereNotNull('timevote_value')->get();
+				$avgTUs = 0;
+				$Tcount = 0;
+				$timevote = DB::table('timevote')->where('timevote_session_ID','=',$sess)->where('timevote_userstory_id','=',$ustory->userstory_ID)->get();
 			foreach ($timevote as $timevote) {
-				if($timevote->timevote_value != '?'){
+				if($timevote->timevote_value != '?' && $timevote->timevote_value != 'coffee'){
 					$sumTvote = $sumTvote + $timevote->timevote_value;
 					$Tcount += 1;
 				}
-			} 
 				$avgTUs = $sumTvote/$Tcount;
 				$avgTUsFormat = number_format($avgTUs, 2, '.', '');
 			
-			DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_ID', '=', $ustory->userstory_ID)->update(array('userstory_time_average' => $avgTUsFormat));
+			DB::table('userstory')->where('userstory_session_ID','=',$sess)->where('userstory_ID', '=', $timevote->timevote_userstory_id)->update(array('userstory_time_average' => $avgTUsFormat));
+		}
 	}
 }
 
@@ -155,7 +157,7 @@ class FileController extends Controller
 	$this->calcTime($sess);
 	$this->sumCalcTime($sess);
 
-//Vote Tabelle
+
 	$html = '<html><head><meta charset="utf-8"><style>.links{text-align:left;} .rechts{text-align:right;} tfoot{font-size: 24px; border-top: 2px #9b0000 solid; color:#9b0000;} thead{height: 90%;border-bottom: 2px #9b0000 solid} table{width:100%; text-align:center; margin-bottom: 20px;} .family{font-family:Helvetica;} .headers{font-weight:bold;color:#9b0000;font-size:28px;} h1{font-size: 50px;} h2{color:#9b0000; font-size:45px; page-break-before:always;} td{width:50%} .ustry{width:100%; border:2px #000 solid; text-align:center; font-size:23px;} .table{margin:auto;}</style></head><body class="family">';
 	$html = $html.'<h1>Zusammenfassung</h1>';
 	$sessio = DB::table('session')->where('session_ID','=',$sess)->get();
@@ -209,7 +211,7 @@ class FileController extends Controller
 	//Timevote Tabellen
 		$html = $html.'<h2>Timevotes</h2>';
 		//Userstory (nur mit timevotes) Tabellen erstellen
-		$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sessio->session_ID)->where('userstory_time_average','>',0)->get();
+		$ustory = DB::table('userstory')->where('userstory_session_ID','=',$sessio->session_ID)->where('userstory_time_average','>=',0.01)->get();
 		foreach ($ustory as $ustory) {
 			$html = $html.'<table class="ustry"><thead class="headers"><tr><td>User</td><td>'.$ustory->userstory_name.'</td></tr></thead>';
 
@@ -220,7 +222,7 @@ class FileController extends Controller
 				//timevote des users zur userstory
 				$timevote = DB::table('timevote')->where('timevote_user_id','=',$user->user_ID)->where('timevote_userstory_id','=',$ustory->userstory_ID)->get();
 				foreach ($timevote as $timevote) {
-					$timevoteVal = $timevote->timevote_value;
+					$timevoteVal = (Double)$timevote->timevote_value;
 					$timevoteValFormat = number_format($timevoteVal, 2, '.', '');
 					$html = $html.'<tr><td>'.$user->user_name.'</td><td class="rechts">'.$timevoteValFormat.' min.</td></tr>';
 				}
