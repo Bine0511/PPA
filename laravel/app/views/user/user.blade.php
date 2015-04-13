@@ -32,7 +32,7 @@
 		<div class="controlpanel col-md-12 col-sm-12 col-xs-12">
 			<h2>Bitte in Stunden sch&auml;tzen!</h2>
 		</div>
-		<div class="controlpanel col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-6">
+		<div class="controlpanel col-md-2 col-md-offset-5 col-sm-4 col-sm-offset-4 col-xs-6 col-xs-offset-3">
 			{{ Form::text('description', null, array('id' => 'timeinput', 'class' => 'form-control signin-input')) }}
 		</div>
 	</div>
@@ -55,7 +55,7 @@
 		$("#timebox").hide();
 		window.onload = function(){
 			conn = new ab.Session(
-		    	'ws://10.14.15.10:8080',
+		    	'ws://10.0.0.10:8080',
 			    function() { // Once the connection has been established
 			        conn.subscribe(sessionstring, function(topic, msg) {
 			        	var message;
@@ -68,31 +68,60 @@
 			        	}
 			        	switch(message.act){
 			        		case "joininfo":
-			        			switch (message.status){
-			        				case 0:
-			        					$("#cardbox").addClass('cardbox-disabled');
-										$(".item").addClass('item-disabled');
-		    							$("#statusmessage").text("Warten auf Moderator...");
-										$("#cardbox").show();
-										$("#userbox").hide();
-			        					break;
-			        				case 1:
-										$("#cardbox").removeClass('cardbox-disabled');
-										$(".item").removeClass('item-disabled');
-				    					$("#statusmessage").text("Abstimmen!");
-										$("#cardbox").show();
-										$("#userbox").hide();
-			        					break;
-			        				case 2:
-			        					$("#cardbox").addClass('cardbox-disabled');
-										$(".item").addClass('item-disabled');
-				    					$("#statusmessage").text("Moderator hat die Kartenauswahl gesperrt");	
-										$("#cardbox").show();
-										$("#userbox").hide();
-			        					break;
-			        				default:
-			        					break;;
-			        			}
+			        			if(message.mode=="norm"){
+				        			switch (message.status){
+				        				case 0:
+				        					$("#cardbox").addClass('cardbox-disabled');
+											$(".item").addClass('item-disabled');
+			    							$("#statusmessage").text("Warten auf Moderator...");
+											$("#cardbox").show();
+											$("#userbox").hide();
+				        					break;
+				        				case 1:
+											$("#cardbox").removeClass('cardbox-disabled');
+											$(".item").removeClass('item-disabled');
+					    					$("#statusmessage").text("Abstimmen!");
+											$("#cardbox").show();
+											$("#userbox").hide();
+				        					break;
+				        				case 2:
+				        					$("#cardbox").addClass('cardbox-disabled');
+											$(".item").addClass('item-disabled');
+					    					$("#statusmessage").text("Moderator hat die Kartenauswahl gesperrt");	
+											$("#cardbox").show();
+											$("#userbox").hide();
+				        					break;
+				        				default:
+				        					break;;
+				        			}
+				        		}
+				        		if(message.mode == "time"){
+				        			switch (message.status){
+				        				case 0:
+											$("#cardbox").hide();
+											$("#timeinput").prop('disabled', true);
+			    							$("#statusmessage").text("Warten auf Moderator...");
+											$("#timebox").show();
+											$("#userbox").hide();
+				        					break;
+				        				case 1:
+											$("#cardbox").hide();
+											$("#timeinput").prop('disabled', false);
+					    					$("#statusmessage").text("Abstimmen!");
+											$("#timebox").show();
+											$("#userbox").hide();
+				        					break;
+				        				case 2:
+											$("#cardbox").hide();
+											$("#timeinput").prop('disabled', true);
+					    					$("#statusmessage").text("Moderator hat die Kartenauswahl gesperrt");	
+											$("#timebox").show();
+											$("#userbox").hide();
+				        					break;
+				        				default:
+				        					break;;
+				        			}
+				        		}
 			        			$("#userstory").text(message.story);
 			        			break;
 			    			case "start":
@@ -109,6 +138,25 @@
 								$("#cardbox").hide();
 								$("#userbox").show();
 								break;
+							case "timestart":
+								$("#timeinput").prop('disabled', false);
+		    					$("#statusmessage").text("Abstimmen!");
+								$("#timebox").show();
+								$("#userbox").hide();
+								break;
+							case "timestop":
+								$("#statusmessage").text("Moderator hat die Kartenauswahl gesperrt");
+								$("#timeinput").prop('disabled', true);
+								$("#timebox").hide();
+								$("#userbox").show();
+		    					$('#timeinput').val('');
+								break;
+							case "timeagain":
+								$("#timeinput").prop('disabled', true);
+								$("#timebox").show();
+								$("#userbox").hide();
+								$("#userbox").empty();
+								break;
 							case "voteinfo":
 			        			var userid = message.user_id;
 			        			var username = message.user_name;
@@ -123,6 +171,22 @@
 			        								<div id='box_" + userid + "' class='box'> \
     												<h3><span class='card label " + labelclass + "'>" + text + "</span></h3> \
     												<img id='img_" + userid + "' class='card' src='images/" + value + ".png'/> \
+    												</div></div>");
+			        			break;
+			        		case "timevoteinfo":
+			        			var userid = message.user_id;
+			        			var username = message.user_name;
+			        			var value = message.val;
+			        			var labelclass ="label-default";
+			        			var text = username;
+			        			if(username == name){
+			        				labelclass = "label-danger";
+			        				text = "Ich";
+			        			}
+			        			$('#userbox').append("<div id='container_" + userid + "' class='boxcontainer col-md-2 col-sm-3 col-xs-6'> \
+			        								<div id='box_" + userid + "' class='box'> \
+    												<h3><span class='card label " + labelclass + "'>" + text + "</span></h3> \
+    												<span id='vote_" + userid + "' class='card timecard'>" + value + " h<span/> \
     												</div></div>");
 			        			break;
 				        	case "again":
@@ -144,6 +208,16 @@
 								$("#userbox").empty();
 			        			$("#userstory").text(message.story);
 			        			break;
+			        		case "timenext":
+		    					$("#statusmessage").text("Warten auf Moderator...");
+								$("#timeinput").prop('disabled', true);
+								$("#userbox").hide();
+								$("#timebox").hide();
+								$("#userbox").empty();
+			        			$("#userstory").text(message.story);
+			        			break;
+			        		case "ende":
+			        			window.location="{{URL::to('end')}}";
 			        		default:
 			        			break;
 		        		}
@@ -197,6 +271,16 @@
 		    	message.act = 'pick';
 		    	message.val = $(this).children("img").attr('src');
 		    	console.log("Sending: " + JSON.stringify(message));
+				conn.publish(sessionstring, JSON.stringify(message));
+			});
+
+			$("#timeinput").on("input", function() {
+				var message = {};
+					message.user_id = id;
+				message.user_name = name;
+				message.act = 'pick';
+				message.val = $('#timeinput').val();
+				console.log("Sending: " + JSON.stringify(message));
 				conn.publish(sessionstring, JSON.stringify(message));
 			});
 		}

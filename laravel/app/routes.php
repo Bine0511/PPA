@@ -17,6 +17,7 @@ Route::get("/ppa_mod", [
 	"as" => "mod/moderator",
 	"uses" => "HomeController@showModTest"
 ]);
+
 Route::get("/ppa_user", [
 	"as" => "user/user",
 	"uses" => "HomeController@showUserTest"

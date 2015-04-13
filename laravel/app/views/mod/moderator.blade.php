@@ -62,8 +62,8 @@
 
 			        	switch(message.act){
 			        		case "joininfo":
-			        			mode = message.mode;
 								$(".bt_swap").removeClass('button-disabled');
+								mode = message.mode;
 			        			switch (message.status){
 			        				case 0:
 										$(".bt_swap").html('Start');
@@ -97,26 +97,47 @@
 			        			userid=message.user_id;
 			        			username=message.user_name;
 			        			$('#container_' + userid).remove();
-			        			$('#userbox').append("<div id='container_" + userid + "' class='boxcontainer col-md-2 col-sm-3 col-xs-6'> \
+			        			if(mode=="time"){
+			        				$('#userbox').append("<div id='container_" + userid + "' class='boxcontainer col-md-2 col-sm-3 col-xs-6'> \
+			        								<div id='box_" + userid + "' class='box'> \
+    												<h3><span class='card label label-default'>" + username + "</span></h3> \
+    												<span id='vote_" + userid + "' class='card timecard'> </span> \
+    												</div></div>");
+			        			}else{
+			        				$('#userbox').append("<div id='container_" + userid + "' class='boxcontainer col-md-2 col-sm-3 col-xs-6'> \
 			        								<div id='box_" + userid + "' class='box'> \
     												<h3><span class='card label label-default'>" + username + "</span></h3> \
     												<img id='img_" + userid + "' class='card' src='images/leer.png'/> \
     												</div></div>");
+			        			}
 			        			break;
 			        		case "prejoin":
 			        			userid=message.user_id;
 			        			username=message.user_name;
 			        			$('#container_' + userid).remove();
-			        			$('#userbox').append("<div id='container_" + userid + "' class='boxcontainer col-md-2 col-sm-3 col-xs-6'> \
+			        			if(mode=="time"){
+			        				$('#userbox').append("<div id='container_" + userid + "' class='boxcontainer col-md-2 col-sm-3 col-xs-6'> \
+			        								<div id='box_" + userid + "' class='box'> \
+    												<h3><span class='card label label-default'>" + username + "</span></h3> \
+    												<span id='vote_" + userid + "' class='card timecard'> </span> \
+    												</div></div>");
+			        			}else{
+			        				$('#userbox').append("<div id='container_" + userid + "' class='boxcontainer col-md-2 col-sm-3 col-xs-6'> \
 			        								<div id='box_" + userid + "' class='box'> \
     												<h3><span class='card label label-default'>" + username + "</span></h3> \
     												<img id='img_" + userid + "' class='card' src='images/leer.png'/> \
     												</div></div>");
+			        			}
 			        			break;
 			        		case "pick":
-			        			//change image
-			        			var image_id = '#img_' + message.user_id;
-			        			$(image_id).attr("src", message.val);
+			        			if(mode=="time"){
+			        				var span_id = '#vote_' + message.user_id;
+			        				$(span_id).text(message.val + " h");
+			        			}else{
+			        				//change image
+			        				var image_id = '#img_' + message.user_id;
+			        				$(image_id).attr("src", message.val);
+			        			}
 			        			break;
 			        		case "leave":
 			        			var container_id = '#container_' + message.user_id;
@@ -132,6 +153,7 @@
 			        			$("#head").hide();
 			        			$("#userbox").hide();
 			        			$("#timebox").show();
+			        			mode="time";
 			        			var stories = message.stories;
 			        			var key;
 								for (key in stories) {
@@ -140,6 +162,15 @@
 									$('#SEL_3').append("<option id='opt_" + stories[key].userstory_ID + "'>" + stories[key].userstory_name + "</option>");
 								}
 			        			break;
+			        		case "timenext":
+			        			$(".bt_swap").html('Start');
+								$(".bt_next").addClass('button-disabled');
+			        			$("#userstory").text(message.story);
+			        			$(".timecard").val('');
+			        			break;
+
+			        		case "ende":
+			        			window.location="{{URL::to('pdf/" + sessionid + "')}}";
 			        		default:
 			        			break;
 			        	}
@@ -166,11 +197,7 @@
 		    	message.user_id = id;
 				switch(bt_text){
 					case "Start":
-						if(mode == 'time'){
-
-						}else{
-		    				message.act = 'start';
-						}
+		    			message.act = 'start';
 						$(".bt_swap").html('Stop');
 						$(".bt_next").addClass('button-disabled');
 						break;
@@ -229,7 +256,7 @@
 		        message.act = 'timefwd';
 	    		console.log("Sending: " + JSON.stringify(message));
 		        conn.publish(sessionstring, JSON.stringify(message));
-
+		        $("#userbox").empty();
 		        $("#head").show();
 			    $("#userbox").show();
 			    $("#timebox").hide();
